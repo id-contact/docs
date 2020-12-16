@@ -1,0 +1,114 @@
+
+@startuml
+title ID-contact Core Global sequence v0.1
+
+actor Citizen as citizen
+participant "Widget" as widget
+participant "ID Contact Core" as id_contact_core
+participant "Auth plugin" as auth_plugin
+participant "Matcher" as matcher
+participant "Comm plugin" as comm_plugin
+actor Agent as agent
+
+== Initialize session ==
+note left of widget
+Set up session, given the purpose. The Core decides which
+authentication method and communication method can be used,
+and which set of attributes is needed to handle the process
+end note
+activate citizen
+citizen->widget: navigate
+activate widget
+widget-->citizen: page
+citizen->widget: click
+widget->id_contact_core: newSession(purpose)
+activate id_contact_core
+id_contact_core->id_contact_core: getAuthMethod(purpose)
+id_contact_core->id_contact_core: getCommMethod(purpose)
+id_contact_core->id_contact_core: generateSessionToken
+id_contact_core-->widget: ok(sessionToken, commEndpoints, attrRequests),
+deactivate id_contact_core
+widget-->citizen: authMethods
+deactivate widget
+== Authentication ==
+
+note left of widget
+A session was created. The Citizen decides which authentication
+they want to use, and get presented the Auth plugin's specific
+content. This could be IRMA's popup or a DigiD login screen.
+In some way that is specific to the auth plugin, attributes are
+yielded. These attributes are signed by the Auth plugin and sent
+to the Widget.
+end note
+citizen->widget: selectAuthMethod
+activate widget
+widget->auth_plugin: authenticate(sessionToken, attrs)
+activate auth_plugin
+auth_plugin->auth_plugin: signAttrs
+auth_plugin-->widget: ok(attrsSigned)
+deactivate auth_plugin
+
+== Start conversation ==
+note left of widget
+Given the signed attributes and the session information,
+the Widget can now start a session with one of the Comm plugins
+suggested by the core.
+The Comm plugin checks the signatures of the session
+token and the attributes, to validate that they were created
+by the core and the Auth plugin respectively.
+The Comm plugin either asks the Matcher to assign an agent
+to the session, or assigns agents by itself. In the latter case
+matcher is not needed.
+end note
+
+widget->citizen: commMethods
+deactivate widget
+citizen->widget: selectCommMethod
+activate widget
+widget->comm_plugin:startSession(sessionToken, attrsSigned)
+activate comm_plugin
+comm_plugin->matcher: assignAgent(sessionToken)
+activate matcher
+matcher->matcher: assignAgent(commMethod, sessionToken)
+
+matcher-->comm_plugin: agentId
+deactivate matcher
+comm_plugin->comm_plugin:createConversation(sessionToken, AgentId)
+
+== Conversation ongoing ==
+note left of widget
+The conversation was set up and the citizen's attribute are
+sent presented to the agent in some Comm plugin-specific manner
+At this point, the assgined Agent is notified of the incoming session
+and the Citizen is redirected to the environment where the
+conversation can take place.
+end note
+
+comm_plugin->agent: newConversation(attrsSigned)
+activate agent
+comm_plugin-->widget:redirectUrl
+deactivate comm_plugin
+citizen<->agent: Conversation
+
+note left of widget
+Either the Citizen or the Agent closes the conversation. Once the
+Agent deletes the attributes, the comm
+plugin removes any attributes left in its memory.
+end note
+== End conversation ==
+agent->comm_plugin: closeConversation
+activate comm_plugin
+comm_plugin->widget: conversationClosed
+deactivate comm_plugin
+deactivate widget
+widget->citizen: conversationClosed
+deactivate citizen
+agent->comm_plugin: deleteAttributes
+activate comm_plugin
+comm_plugin->agent: ok
+deactivate comm_plugin
+deactivate agent
+
+
+
+@enduml
