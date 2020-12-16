@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: ID Contact Authentication plugin
+  description: >
+    ID Contact Authentication plugin. Given a signed set of attributes, 
+    it matches the session with an agent, sets up the conversation,
+    and presents the attributes to the agent.
+  contact:
+    email: henkdieter@tweedegolf.com
+  version: 0.0.1
+externalDocs:
+  description: Repository
+  url: 'https://tgrep.nl/id-contact/id-contact/'
+servers:
+  - url: 'https://core.idcontact.test.tweede.golf'
+    description: Local development
+tags:
+  - name: Communication
+security:
+  - BasicAuth: []
+
+paths:
+  /todo:
+    post:
+      description: todo
+      responses:
+        '200':
+          description: todo
+          

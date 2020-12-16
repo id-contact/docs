@@ -1,0 +1,37 @@
+AuthenticationSchema:
+  type: string
+
+Purpose:
+  type: string
+SessionRequest:
+  type: object
+  properties:
+    purpose:
+      $ref: '#/Purpose'
+    params: {}
+      
+  required:
+    - purpose
+    - params
+Session:
+  type: object
+  properties:
+    token:
+      type: string
+    timestamp:
+      type: string
+      format: date
+    
+AttributeRequest:
+  type: object
+  properties:
+    schema:
+      $ref: '#/AuthenticationSchema'
+    authEndpoint:
+      type: string
+Employee:
+  type: object
+  properties:
+    id:
+      type: string
+    
