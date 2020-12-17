@@ -4,7 +4,7 @@ title ID-contact Core Global sequence v0.1
 
 actor Citizen as citizen
 participant "Widget" as widget
-participant "ID Contact Core" as id_contact_core
+participant "ID Contact Core" as core
 participant "Auth plugin" as auth_plugin
 participant "Matcher" as matcher
 participant "Comm plugin" as comm_plugin
@@ -21,13 +21,13 @@ citizen->widget: navigate
 activate widget
 widget-->citizen: page
 citizen->widget: click
-widget->id_contact_core: newSession(purpose)
-activate id_contact_core
-id_contact_core->id_contact_core: getAuthMethod(purpose)
-id_contact_core->id_contact_core: getCommMethod(purpose)
-id_contact_core->id_contact_core: generateSessionToken
-id_contact_core-->widget: ok(sessionToken, commEndpoints, attrRequests),
-deactivate id_contact_core
+widget->core: newSession(purpose)
+activate core
+core->core: getAuthMethod(purpose)
+core->core: getCommMethod(purpose)
+core->core: generateSessionToken
+core-->widget: ok(sessionToken, commEndpoints, attrRequests),
+deactivate core
 widget-->citizen: authMethods
 deactivate widget
 == Authentication ==
