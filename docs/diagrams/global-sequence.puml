@@ -14,7 +14,7 @@ actor Agent as agent
 note left of widget
 Set up session, given the purpose. The Core decides which
 authentication method and communication method can be used,
-and which set of attributes is needed to handle the process
+and which set of attributes is needed to handle the process.
 end note
 activate citizen
 citizen->widget: navigate
@@ -37,20 +37,20 @@ A session was created. The Citizen decides which authentication
 they want to use, and get presented the Auth plugin's specific
 content. This could be IRMA's popup or a DigiD login screen.
 In some way that is specific to the auth plugin, attributes are
-yielded. These attributes are signed by the Auth plugin and sent
-to the Widget.
+yielded. These attributes are encrypted by the Auth plugin and sent
+to the Widget. The attributes can later be decrypted by any of the the comm plugins.
 end note
 citizen->widget: selectAuthMethod
 activate widget
 widget->auth_plugin: authenticate(sessionToken, attrs)
 activate auth_plugin
-auth_plugin->auth_plugin: signAttrs
-auth_plugin-->widget: ok(attrsSigned)
+auth_plugin->auth_plugin: encrypt(attts, secret)
+auth_plugin-->widget: ok(attrsEncrypted)
 deactivate auth_plugin
 
 == Start conversation ==
 note left of widget
-Given the signed attributes and the session information,
+Given the encrypted attributes and the session information,
 the Widget can now start a session with one of the Comm plugins
 suggested by the core.
 The Comm plugin checks the signatures of the session
@@ -65,7 +65,7 @@ widget->citizen: commMethods
 deactivate widget
 citizen->widget: selectCommMethod
 activate widget
-widget->comm_plugin:startSession(sessionToken, attrsSigned)
+widget->comm_plugin:startSession(sessionToken, attrsEncrypted)
 activate comm_plugin
 comm_plugin->matcher: assignAgent(sessionToken)
 activate matcher
@@ -84,7 +84,8 @@ and the Citizen is redirected to the environment where the
 conversation can take place.
 end note
 
-comm_plugin->agent: newConversation(attrsSigned)
+comm_plugin->comm_plugin: decrypt(arrts, secret)
+comm_plugin->agent: newConversation(attrs)
 activate agent
 comm_plugin-->widget:redirectUrl
 deactivate comm_plugin
@@ -108,7 +109,6 @@ activate comm_plugin
 comm_plugin->agent: ok
 deactivate comm_plugin
 deactivate agent
-
 
 
 @enduml
