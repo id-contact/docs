@@ -1,0 +1,46 @@
+@startuml
+title ID-contact Core Global deployment v0.1
+skinparam rectangle {
+    roundCorner<<Auth plugin>> 25
+}
+
+skinparam rectangle {
+    roundCorner<<Comm plugin>> 10
+}
+
+actor Citizen as citizen
+actor Agent as agent
+
+cloud "ID contact" {
+    rectangle Core as core
+    rectangle "IRMA" <<Auth plugin>> as auth_irma
+    rectangle "DigiD Routeringsvoorziening" <<Auth plugin>> as auth_digid
+
+    rectangle "Amazon Connect" <<Comm plugin>> as comm_connect
+    rectangle "Matrix" <<Comm plugin>> as comm_matrix
+
+    rectangle "Matcher" <<Optional>> as matcher
+}
+
+rectangle Widget as widget
+rectangle "Matrix Client" as matrix_client
+rectangle "Connect client" as connect_client
+
+
+citizen<-->widget
+agent<-->connect_client
+agent<-->matrix_client
+
+widget<-->core
+widget<--->auth_digid
+widget<-->auth_irma
+widget<-->comm_matrix
+widget<-->comm_connect
+
+matrix_client<-->comm_matrix
+connect_client<-->comm_connect
+
+comm_connect<..>matcher
+comm_matrix<..>matcher
+
+@enduml
