@@ -1,5 +1,5 @@
 @startuml
-title ID-contact Core Global deployment v0.1
+title ID-contact Core Global deployment v0.2
 skinparam rectangle {
     roundCorner<<Auth plugin>> 25
 }
@@ -20,22 +20,32 @@ cloud "ID contact" {
     rectangle "Matrix" <<Comm plugin>> as comm_matrix
 
     rectangle "Matcher" <<Optional>> as matcher
+    database "Session database" as session_db
 }
 
 rectangle Widget as widget
 rectangle "Matrix Client" as matrix_client
 rectangle "Connect client" as connect_client
+rectangle IRMA as irma
+rectangle DigiD as digid
 
 
 citizen<-->widget
+citizen<-->irma
+citizen<-->digid
 agent<-->connect_client
 agent<-->matrix_client
 
-widget<-->core
-widget<--->auth_digid
-widget<-->auth_irma
-widget<-->comm_matrix
-widget<-->comm_connect
+core<-u->widget
+core<->auth_digid
+core<->auth_irma
+core<-l->comm_matrix
+core<-l->comm_connect
+
+core<-->session_db
+
+digid<-->auth_digid
+irma<-->auth_irma
 
 matrix_client<-->comm_matrix
 connect_client<-->comm_connect
