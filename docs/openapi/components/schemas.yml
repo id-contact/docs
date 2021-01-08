@@ -1,8 +1,56 @@
+Identifier:
+  type: string
+  format: UUID
+
 AuthenticationSchema:
+  type: string
+
+AuthenticationEndpoint:
+  type: object
+  properties:
+    id:
+      $ref: '#/Identifier'
+    description:
+      type: string
+
+CommunicationEndpoint:
+  type: object
+  properties:
+    id:
+      $ref: '#/Identifier'
+    description:
+      type: string
+
+SessionToken:
   type: string
 
 Purpose:
   type: string
+
+Session:
+  type: object
+  properties:
+    token:
+      $ref: '#/SessionToken'
+    creation:
+      type: string
+      format: date-time
+    expiration:
+      type: string
+      format: date-time
+    
+AttributeRequest:
+  type: object
+  properties:
+    schema:
+      $ref: '#/AuthenticationSchema'
+      
+Employee:
+  type: object
+  properties:
+    id:
+      type: string
+
 SessionRequest:
   type: object
   properties:
@@ -13,25 +61,44 @@ SessionRequest:
   required:
     - purpose
     - params
-Session:
+
+SessionResponse:
   type: object
   properties:
-    token:
-      type: string
-    timestamp:
-      type: string
-      format: date
-    
-AttributeRequest:
+    session:
+      $ref: '#/Session'
+    attr_request:
+      $ref: '#/AttributeRequest'
+    auth_endpoints:
+      type: 'array'
+      items: 
+        $ref: '#/AuthenticationEndpoint'
+    comm_endpoints:
+      type: 'array'
+      items:
+        $ref: '#/CommunicationEndpoint'
+
+SelectAuthEndpointRequest:
   type: object
   properties:
-    schema:
-      $ref: '#/AuthenticationSchema'
-    authEndpoint:
-      type: string
-Employee:
+    session_token:
+      $ref: '#/SessionToken'
+    auth_endpoint:
+      $ref: '#/Identifier'
+
+SelectAuthEndpointResponse:
+  type: object
+
+SelectCommEndpointRequest:
   type: object
   properties:
-    id:
-      type: string
-    
+    session_token:
+      $ref: '#/SessionToken'
+    comm_endpoint:
+      $ref: '#/Identifier'
+
+SelectCommEndpointResponse:
+  type: object
+  properties:
+    redirect_url:
+        type: string

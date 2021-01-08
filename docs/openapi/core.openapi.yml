@@ -1,10 +1,10 @@
 openapi: 3.0.3
 info:
   title: ID Contact core
-  description: ID Contact core. Matches session requests with authentication and communication methods and redirects citizens to corresponding plugins. Also, manages a pool of KCC-officials to which sessions are assigned using a queue that is common to all communication methods.
+  description: ID Contact core. Matches session requests with authentication and communication methods and redirects citizens to corresponding plugins.
   contact:
     email: henkdieter@tweedegolf.com
-  version: 0.0.1
+  version: 0.0.2
 externalDocs:
   description: Repository
   url: 'https://tgrep.nl/id-contact/id-contact/'
@@ -13,12 +13,14 @@ servers:
     description: Local development
 tags:
   - name: Session
+  - name: Authentication
+  - name: Communication
 security:
   - BasicAuth: []
 paths:
   /session:
     post:
-      summary: Create a new Session and get details on the required attributes and the possible communication methods. To be called by the client.
+      summary: Create a new Session and get details on the required attributes and the possible communication methods. To be called by the widget.
       tags:
         - Session
       requestBody:
@@ -29,22 +31,51 @@ paths:
               $ref: 'components/schemas.yml#/SessionRequest'
       responses:
         '200':
-          description: Session created
+          description: Session created successfully.
           content:
             application/json:
               schema:
-                properties:
-                  session:
-                    $ref: 'components/schemas.yml#/Session'
-                  attrRequests:
-                    type: array
-                    items: 
-                      $ref: 'components/schemas.yml#/AttributeRequest'
-                  commEndpoints:
-                    type: array
-                    items:
-                      type: string
-  
+                $ref: 'components/schemas.yml#/SessionResponse'
+                    
+  /authenticate:
+    post:
+      summary: Select an authentication endpoint and set up the authentication flow. To be called by the widget.
+      tags: 
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'components/schemas.yml#/SelectAuthEndpointRequest'
+      responses:
+        '200':
+          description: Authentication flow set up successfully
+          content:
+            application/json:
+              schema:
+                $ref: 'components/schemas.yml#/SelectAuthEndpointResponse'
+                
+  /communicate:
+    post:
+      summary: Select a communication endpoint and set up the communication flow. To be called by the widget.
+      tags:
+        - Communication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'components/schemas.yml#/SelectCommEndpointRequest'
+      responses:
+        '200':
+          description: Communication set up successfully.
+          content:
+            application/json:
+              schema:
+                $ref: 'components/schemas.yml#/SelectCommEndpointResponse'
+        
+
 components:
   securitySchemes:
     BasicAuth:
