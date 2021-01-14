@@ -11,44 +11,48 @@ skinparam rectangle {
 actor Citizen as citizen
 actor Agent as agent
 
-cloud "ID contact" {
-    rectangle Core as core
-    rectangle "IRMA" <<Auth plugin>> as auth_irma
-    rectangle "DigiD Routeringsvoorziening" <<Auth plugin>> as auth_digid
+rectangle "ID contact" {
+    rectangle Widget as widget
+    
+    cloud backend {
+        rectangle Core as core
+        rectangle "IRMA" <<Auth plugin>> as auth_irma
+        rectangle "DigiD Routeringsvoorziening" <<Auth plugin>> as auth_digid
 
-    rectangle "Amazon Connect" <<Comm plugin>> as comm_connect
-    rectangle "Matrix" <<Comm plugin>> as comm_matrix
+        rectangle "Amazon Connect" <<Comm plugin>> as comm_connect
+        rectangle "Matrix" <<Comm plugin>> as comm_matrix
 
-    rectangle "Matcher" <<Optional>> as matcher
-    database "Session database" as session_db
+        rectangle "Matcher" <<Optional>> as matcher
+        database "Session database" as session_db
+    }
 }
 
-rectangle Widget as widget
+
 rectangle "Matrix Client" as matrix_client
 rectangle "Connect client" as connect_client
 rectangle IRMA as irma
 rectangle DigiD as digid
 
 
-citizen<-->widget
+citizen<--->widget
 citizen<-->irma
 citizen<-->digid
 agent<-->connect_client
 agent<-->matrix_client
 
 core<-u->widget
-core<->auth_digid
-core<->auth_irma
-core<-l->comm_matrix
-core<-l->comm_connect
+core<-l->auth_digid
+core<-l->auth_irma
+core<->comm_matrix
+core<->comm_connect
 
 core<-->session_db
 
-digid<-->auth_digid
-irma<-->auth_irma
+digid<->auth_digid
+irma<->auth_irma
 
 matrix_client<-->comm_matrix
-connect_client<-->comm_connect
+connect_client<--->comm_connect
 
 comm_connect<..>matcher
 comm_matrix<..>matcher

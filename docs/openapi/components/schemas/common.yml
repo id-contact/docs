@@ -1,0 +1,12 @@
+Identifier:
+  type: string
+  format: UUID
+
+AuthenticationSchema:
+  type: string
+
+SessionToken:
+  type: string
+
+Purpose:
+  type: string

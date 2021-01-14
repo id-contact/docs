@@ -1,0 +1,92 @@
+
+Session:
+  type: object
+  properties:
+    token:
+      $ref: 'common.yml#/SessionToken'
+    creation:
+      type: string
+      format: date-time
+    expiration:
+      type: string
+      format: date-time
+
+AuthenticationEndpoint:
+  type: object
+  properties:
+    id:
+      $ref: 'common.yml#/Identifier'
+    description:
+      type: string
+
+CommunicationEndpoint:
+  type: object
+  properties:
+    id:
+      $ref: 'common.yml#/Identifier'
+    description:
+      type: string
+
+AttributeRequest:
+  type: object
+  properties:
+    schema:
+      $ref: 'common.yml#/AuthenticationSchema'
+      
+Employee:
+  type: object
+  properties:
+    id:
+      type: string
+
+SessionRequest:
+  type: object
+  properties:
+    purpose:
+      $ref: 'common.yml#/Purpose'
+    params: {}
+      
+  required:
+    - purpose
+    - params
+
+SessionResponse:
+  type: object
+  properties:
+    session:
+      $ref: '#/Session'
+    attr_request:
+      $ref: '#/AttributeRequest'
+    auth_endpoints:
+      type: 'array'
+      items: 
+        $ref: '#/AuthenticationEndpoint'
+    comm_endpoints:
+      type: 'array'
+      items:
+        $ref: '#/CommunicationEndpoint'
+
+SelectAuthEndpointRequest:
+  type: object
+  properties:
+    session_token:
+      $ref: 'common.yml#/SessionToken'
+    auth_endpoint:
+      $ref: 'common.yml#/Identifier'
+
+SelectAuthEndpointResponse:
+  type: object
+
+SelectCommEndpointRequest:
+  type: object
+  properties:
+    session_token:
+      $ref: 'common.yml#/SessionToken'
+    comm_endpoint:
+      $ref: 'common.yml#/Identifier'
+
+SelectCommEndpointResponse:
+  type: object
+  properties:
+    redirect_url:
+        type: string
