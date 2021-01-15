@@ -10,6 +10,11 @@ participant "Matcher" as matcher
 participant "Comm plugin" as comm_plugin
 actor Agent as agent
 
+== Load widget ==
+activate citizen
+citizen->citizen: navigate
+citizen->widget: load
+activate widget
 == Initialize session ==
 note left of widget
 Set up session, given the purpose. The Core decides which 
@@ -18,11 +23,7 @@ is needed to handle the process. This information is sent to
 the widget and presented to the citizen.
 end note
 
-activate citizen
-citizen->citizen: navigate
-widget-->citizen: page
-activate widget
-citizen->widget: click
+citizen->widget: click start
 widget->core: newSession(purpose)
 activate core
 core->core: generateSessionToken
@@ -48,14 +49,24 @@ activate widget
 widget->core: authenticate(sessionToken)
 activate core
 core->core: assertSessionState(sessionToken, 'initial')
-core->auth_plugin: authenicate(attr)
+core->auth_plugin: startAuthentication(attributeRequest)
 activate auth_plugin
-auth_plugin->auth_plugin: authenticate(attrs)
-auth_plugin-->core: ok(attrs)
+auth_plugin->core: redirectUrl
 deactivate auth_plugin
-core->core: setSessionState(sessionToken, 'authenticated')
-core-->widget: ok
+core->widget: redirectUrl
 deactivate core
+widget->citizen: redirect(redirectUrl)
+deactivate widget
+citizen->auth_plugin: authenticate(sessionToken, attrs)
+
+activate auth_plugin
+auth_plugin->auth_plugin: validate(attrs)
+auth_plugin-->core: authOk(sessionToken, attrs)
+activate core
+core->core: setSessionState(sessionToken, 'authenticated')
+deactivate core
+auth_plugin->citizen: redirect(redirectUrl)
+deactivate auth_plugin
 
 == Start conversation ==
 note left of widget
@@ -70,6 +81,8 @@ assign an agent to the session, or assigns agents by itself.
 In the latter case the matcher is not strictly needed.
 end note
 
+citizen->widget: load(sessionToken)
+activate widget
 widget->citizen: commMethods
 deactivate widget
 citizen->widget: selectCommMethod
