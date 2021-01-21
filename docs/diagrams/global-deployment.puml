@@ -1,5 +1,5 @@
 @startuml
-title ID-contact Core Global deployment v0.2
+title ID-contact Core Global deployment v0.3
 skinparam rectangle {
     roundCorner<<Auth plugin>> 25
 }
@@ -12,49 +12,43 @@ actor Citizen as citizen
 actor Agent as agent
 
 rectangle "ID contact" {
-    rectangle Widget as widget
+    rectangle "Core widget" as core_widget
     
     cloud backend {
-        rectangle Core as core
+        rectangle "Core" as core
         rectangle "IRMA" <<Auth plugin>> as auth_irma
         rectangle "DigiD Routeringsvoorziening" <<Auth plugin>> as auth_digid
 
         rectangle "Amazon Connect" <<Comm plugin>> as comm_connect
         rectangle "Matrix" <<Comm plugin>> as comm_matrix
-
-        rectangle "Matcher" <<Optional>> as matcher
-        database "Session database" as session_db
     }
 }
 
-
-rectangle "Matrix Client" as matrix_client
+rectangle "Matrix client" as matrix_client
 rectangle "Connect client" as connect_client
-rectangle IRMA as irma
-rectangle DigiD as digid
+rectangle "IRMA UI" as irma
+rectangle "DigiD UI" as digid
+rectangle "Matrix Widget" as matrix_widget
 
+citizen<-->core_widget
+citizen<-r->irma
+citizen<-r->digid
+citizen<-->matrix_widget
 
-citizen<--->widget
-citizen<-->irma
-citizen<-->digid
 agent<-->connect_client
 agent<-->matrix_client
 
-core<-u->widget
-core<-l->auth_digid
-core<-l->auth_irma
-core<->comm_matrix
-core<->comm_connect
-
-core<-->session_db
+core_widget<-->core
+auth_digid<-->core
+auth_irma<-->core
+comm_matrix<-u->core
+comm_connect<-u->core
 
 digid<->auth_digid
 irma<->auth_irma
 
 matrix_client<-->comm_matrix
-connect_client<--->comm_connect
-
-comm_connect<..>matcher
-comm_matrix<..>matcher
+matrix_widget<--->comm_matrix
+connect_client<-->comm_connect
 
 @enduml
