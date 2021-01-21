@@ -14,10 +14,10 @@ An overview of the components of which ID-contact consists, along with each comp
 ## Responsibilities
 
 ### 1. Core
-- Given a session objective, list available communication methods
+- Given a session purpose, list available communication methods
 - List all available authentication methods
 - Sequence the steps in the ID-contact flow
-- Yield attribute requirements per session objective
+- Yield attribute requirements per session purpose
 
 ### 2. Core widget
 - Present the available communication methods from which the citizen can choose.
