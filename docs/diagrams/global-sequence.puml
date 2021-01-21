@@ -1,145 +1,104 @@
 
 @startuml
-title ID-contact Core Global sequence v0.2.1
+title ID-contact Core Global sequence v0.3.0
 
-actor "Citizen (browser)" as citizen
-participant "Widget" as widget
+actor Citizen as citizen
+participant "Core widget" as widget
 participant "ID Contact Core" as core
 participant "Auth plugin" as auth_plugin
-participant "Matcher" as matcher
+participant "Auth widget" as auth_widget
 participant "Comm plugin" as comm_plugin
+participant "Comm widget" as comm_widget
 actor Agent as agent
 
-== Load widget ==
-activate citizen
-citizen->citizen: navigate
-citizen->widget: load
-activate widget
 == Initialize session ==
-note left of widget
-Set up session, given the purpose. The Core decides which 
-communication method can be used, and which set of attributes
-is needed to handle the process. This information is sent to
-the widget and presented to the citizen.
-end note
 
-citizen->widget: click start
+activate citizen
+citizen->widget: navigate
+activate widget
+widget-->citizen: page
+citizen->widget: click
 widget->core: newSession(purpose)
 activate core
+core->core: getAuthMethod(purpose)
+core->core: getCommMethod(purpose)
 core->core: generateSessionToken
-core->core: setSessionState(sessionToken, 'initial')
-core-->widget: ok(sessionToken, authEndpoints, commMethods, attRequest),
+core-->widget: ok(sessionToken, commEndpoints, authEndpoints, attrRequests),
 deactivate core
-widget-->citizen: authMethods, attrRequest, commMethods
+widget-->citizen: commEndpoints
 deactivate widget
+citizen->widget: selectCommEndpoint
+activate widget
+widget->comm_plugin: getCommRedirectURI(purpose)
+activate comm_plugin
+comm_plugin-->widget: commRedirectURI
+deactivate comm_plugin
+widget->comm_plugin: getAttrEncryptionKey()
+activate comm_plugin
+comm_plugin-->widget: attrEncryptionKey
+deactivate comm_plugin
+widget-->citizen: authEndpoints
+deactivate widget
+
 == Authentication ==
 
-note left of widget
-A session was created. The Citizen decides which authentication
-they want to use. The core checks that no authentication has taken
-place for the current session yet and get presented the Auth plugin's
-specific content. This could be IRMA's popup or a redirection to a 
-DigiD login screen. In some way that is specific to the auth plugin,
-attributes are yielded. These attributes are sent to the core and
-stored along with the session token. The attributes are sent over to
-the selected Comm plugin when the conversation is initiated.
-end note
 citizen->widget: selectAuthMethod
 activate widget
-widget->core: authenticate(sessionToken)
-activate core
-core->core: assertSessionState(sessionToken, 'initial')
-core->auth_plugin: startAuthentication(attributeRequest)
+widget->auth_plugin: getAuthRedirectURI()
 activate auth_plugin
-auth_plugin->core: redirectUrl
+auth_plugin-->widget: authRedirectURI
 deactivate auth_plugin
-core->widget: redirectUrl
-deactivate core
-widget->citizen: redirect(redirectUrl)
+widget-->citizen: redirect(authRedirectURI, sessionToken, attrRequests, attrEncryptionKey, commRedirectURI)
 deactivate widget
-citizen->auth_plugin: authenticate(sessionToken, attrs)
 
-activate auth_plugin
-auth_plugin->auth_plugin: validate(attrs)
-auth_plugin-->core: authOk(sessionToken, attrs)
-activate core
-core->core: setSessionState(sessionToken, 'authenticated')
-deactivate core
-auth_plugin->citizen: redirect(redirectUrl)
+citizen->auth_widget: load(authRedirectURI, sessionToken)
+activate auth_widget
+auth_widget-->citizen: page
+deactivate auth_widget
+
+citizen->auth_widget: authenticate(credentials, attrRequests, attrEncryptionKey)
+activate auth_widget
+auth_widget->auth_plugin: authenticate(credentials, sessionToken)
+auth_plugin->auth_plugin: getAttrs(credentials)
+auth_plugin->auth_plugin: encrypt(attrs, sessionToken, attrEncryptionKey)
+auth_plugin-->auth_widget: ok(attrsEncrypted)
 deactivate auth_plugin
+auth_widget->citizen: redirect(commRedirectURI, sessionToken, attrsEncrypted)
+deactivate auth_widget
 
 == Start conversation ==
-note left of widget
-The citizen can now select one of the possible communication
-methods and set up a conversation. The core checks that no
-conversation has been started yet for the current session.
-The core then sends over the session's attributes to the 
-Comm plugin. The Comm plugin yields an URL to which the client
-is redirected, placing the client in the queue.
-The Comm plugin either asks the Matcher to 
-assign an agent to the session, or assigns agents by itself. 
-In the latter case the matcher is not strictly needed.
-end note
 
-citizen->widget: load(sessionToken)
-activate widget
-widget->citizen: commMethods
-deactivate widget
-citizen->widget: selectCommMethod
-activate widget
-widget->core: startConversation(sessionToken, commMethod)
-activate core
-core->core: assertSessionState(sessionToken, 'authenticated')
-core->comm_plugin:startConversation(sessionToken, attrs)
+citizen->comm_widget: load(commRedirectURI, sessionToken)
+activate comm_widget
+comm_widget-->citizen: page
+deactivate comm_widget
+
+citizen->comm_widget: startConversation(sessionToken, attrsEncrypted)
+activate comm_widget
+comm_widget->comm_plugin: startConversation(sessionToken, attrsEncrypted)
 activate comm_plugin
-comm_plugin-->core: redirectUrl
-core->core: deleteAttributes(sessionToken)
-core->core: setSessionState(sessionToken, 'communicating')
-core-->widget:redirectUrl
-deactivate core
-widget->citizen: redirect(redirectUrl)
-deactivate widget
-comm_plugin->matcher: assignAgent(sessionToken)
-activate matcher
-matcher->matcher: assignAgent(commMethod, sessionToken)
 
-matcher-->comm_plugin: agentId
-deactivate matcher
-comm_plugin->comm_plugin:createConversation(sessionToken, AgentId)
+comm_plugin->comm_plugin: assignAgent(purpose, sessionToken)
+comm_plugin->comm_plugin: createConversation(agentId, sessionToken)
 
 == Conversation ongoing ==
-note left of widget
-The conversation was set up and the citizen's attributes are
-sent presented to the agent in some Comm plugin-specific manner
-At this point, the assgined Agent is notified of the incoming session
-and the Citizen is redirected to the environment where the
-conversation can take place.
-end note
-
+comm_plugin->comm_plugin: decrypt(attrsEncrypted, attrDecryptionKey)
 comm_plugin->agent: newConversation(attrs)
 deactivate comm_plugin
 
-deactivate widget
-citizen<->agent: Conversation
 activate agent
+citizen<->agent: conversation
 
-note left of widget
-Either the Citizen or the Agent closes the conversation. Once the
-Agent deletes the attributes, the comm
-plugin removes any attributes left in its memory.
-end note
 == End conversation ==
 agent->comm_plugin: closeConversation
-deactivate agent
 activate comm_plugin
 comm_plugin->widget: conversationClosed
 deactivate comm_plugin
-activate widget
-widget->citizen: conversationClosed
 deactivate widget
+widget->citizen: conversationClosed
+deactivate comm_widget
 deactivate citizen
 agent->comm_plugin: deleteAttributes
-activate agent
 activate comm_plugin
 comm_plugin->agent: ok
 deactivate comm_plugin
