@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: ID Contact Authentication plugin
+  title: ID Contact Connunication plugin
   description: >
     ID Contact Authentication plugin. Given a signed set of attributes, 
     it matches the session with an agent, sets up the conversation,
