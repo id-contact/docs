@@ -5,10 +5,10 @@ title ID-contact Core Global sequence v0.3.0
 actor Citizen as citizen
 participant "Core widget" as widget
 participant "ID Contact Core" as core
-participant "Auth plugin" as auth_plugin
 participant "Auth widget" as auth_widget
-participant "Comm plugin" as comm_plugin
+participant "Auth plugin" as auth_plugin
 participant "Comm widget" as comm_widget
+participant "Comm plugin" as comm_plugin
 actor Agent as agent
 
 == Initialize session ==
@@ -59,6 +59,7 @@ deactivate auth_widget
 citizen->auth_widget: authenticate(credentials, attrRequests, attrEncryptionKey)
 activate auth_widget
 auth_widget->auth_plugin: authenticate(credentials, sessionToken)
+activate auth_plugin
 auth_plugin->auth_plugin: getAttrs(credentials)
 auth_plugin->auth_plugin: encrypt(attrs, sessionToken, attrEncryptionKey)
 auth_plugin-->auth_widget: ok(attrsEncrypted)
@@ -92,15 +93,14 @@ citizen<->agent: conversation
 == End conversation ==
 agent->comm_plugin: closeConversation
 activate comm_plugin
-comm_plugin->widget: conversationClosed
+comm_plugin->comm_widget: conversationClosed
 deactivate comm_plugin
-deactivate widget
-widget->citizen: conversationClosed
+comm_widget->citizen: conversationClosed
 deactivate comm_widget
 deactivate citizen
-agent->comm_plugin: deleteAttributes
+agent->comm_plugin: removeSession
 activate comm_plugin
-comm_plugin->agent: ok
+comm_plugin-->agent: ok
 deactivate comm_plugin
 deactivate agent
 
