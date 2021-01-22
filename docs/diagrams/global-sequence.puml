@@ -25,58 +25,48 @@ core->core: getCommMethod(purpose)
 core->core: generateSessionToken
 core-->widget: ok(sessionToken, commEndpoints, authEndpoints, attrRequests),
 deactivate core
-widget-->citizen: commEndpoints
+widget-->citizen: commEndpoints, authEndpoints
 deactivate widget
 citizen->widget: selectCommEndpoint
 activate widget
-widget->comm_plugin: getCommRedirectURI(purpose)
+citizen->widget: selectAuthMethod
+citizen->widget: start
+widget->core: start(commEndpoint, authEndpoint)
+activate core
+core->comm_plugin: start(purpose)
 activate comm_plugin
-comm_plugin-->widget: commRedirectURI
-deactivate comm_plugin
-widget->comm_plugin: getAttrEncryptionKey()
-activate comm_plugin
-comm_plugin-->widget: attrEncryptionKey
-deactivate comm_plugin
-widget-->citizen: authEndpoints
+comm_plugin-->core: ok(commUrl, attrUrl)
+core->auth_plugin: start(client_redirect=commUrl, result=attrUrl, attrRequest)
+activate auth_plugin
+auth_plugin-->core: ok(authUrl)
+core->widget: redirect(authUrl)
+deactivate core
+widget-->citizen: redirect(authUrl)
 deactivate widget
 
 == Authentication ==
 
-citizen->widget: selectAuthMethod
-activate widget
-widget->auth_plugin: getAuthRedirectURI()
-activate auth_plugin
-auth_plugin-->widget: authRedirectURI
-deactivate auth_plugin
-widget-->citizen: redirect(authRedirectURI, sessionToken, attrRequests, attrEncryptionKey, commRedirectURI)
-deactivate widget
-
-citizen->auth_widget: load(authRedirectURI, sessionToken)
+citizen->auth_widget: load(authUrl)
 activate auth_widget
 auth_widget-->citizen: page
 deactivate auth_widget
 
-citizen->auth_widget: authenticate(credentials, attrRequests, attrEncryptionKey)
-activate auth_widget
-auth_widget->auth_plugin: authenticate(credentials, sessionToken)
-auth_plugin->auth_plugin: getAttrs(credentials)
-auth_plugin->auth_plugin: encrypt(attrs, sessionToken, attrEncryptionKey)
-auth_plugin-->auth_widget: ok(attrsEncrypted)
+citizen->auth_plugin: authenticate()
+auth_plugin-->citizen: redirect(clientRedirect)
+auth_plugin->comm_plugin: attrUrl(attrsEncrypted)
+comm_plugin-->auth_plugin: ok()
 deactivate auth_plugin
-auth_widget->citizen: redirect(commRedirectURI, sessionToken, attrsEncrypted)
-deactivate auth_widget
 
 == Start conversation ==
 
-citizen->comm_widget: load(commRedirectURI, sessionToken)
+citizen->comm_widget: load(clientRedirect)
 activate comm_widget
 comm_widget-->citizen: page
 deactivate comm_widget
 
-citizen->comm_widget: startConversation(sessionToken, attrsEncrypted)
+citizen->comm_widget: startConversation()
 activate comm_widget
-comm_widget->comm_plugin: startConversation(sessionToken, attrsEncrypted)
-activate comm_plugin
+comm_widget->comm_plugin: startConversation(sessionToken, purpose)
 
 comm_plugin->comm_plugin: assignAgent(purpose, sessionToken)
 comm_plugin->comm_plugin: createConversation(agentId, sessionToken)
@@ -84,22 +74,18 @@ comm_plugin->comm_plugin: createConversation(agentId, sessionToken)
 == Conversation ongoing ==
 comm_plugin->comm_plugin: decrypt(attrsEncrypted, attrDecryptionKey)
 comm_plugin->agent: newConversation(attrs)
-deactivate comm_plugin
 
 activate agent
 citizen<->agent: conversation
 
 == End conversation ==
 agent->comm_plugin: closeConversation
-activate comm_plugin
 comm_plugin->widget: conversationClosed
-deactivate comm_plugin
 deactivate widget
 widget->citizen: conversationClosed
 deactivate comm_widget
 deactivate citizen
 agent->comm_plugin: deleteAttributes
-activate comm_plugin
 comm_plugin->agent: ok
 deactivate comm_plugin
 deactivate agent
