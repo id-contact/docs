@@ -38,7 +38,7 @@ core->core: getAttrRequest(purpose)
 core->auth_plugin: start(clientRedirect=commUrl, attrRequest)
 activate auth_plugin
 auth_plugin-->core: ok(authUrl)
-core->widget: redirect(authUrl)
+core-->widget: redirect(authUrl)
 deactivate core
 widget-->citizen: redirect(authUrl)
 deactivate widget
@@ -50,7 +50,7 @@ activate auth_widget
 auth_widget-->citizen: page
 deactivate auth_widget
 
-citizen->auth_plugin: authenticate()
+citizen->auth_plugin: authenticate
 auth_plugin-->citizen: redirect(clientRedirect(attrsEncrypted))
 deactivate auth_plugin
 
@@ -60,7 +60,7 @@ citizen->comm_widget: load(clientRedirect(attrsEncrypted))
 activate comm_widget
 comm_widget-->citizen: page
 
-citizen->comm_widget: startConversation()
+citizen->comm_widget: startConversation
 comm_widget->comm_plugin: startConversation(attrsEncrypted)
 activate comm_plugin
 

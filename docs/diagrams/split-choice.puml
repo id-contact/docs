@@ -30,13 +30,13 @@ widget-->citizen: authMethods
 
 citizen->widget: selectAuthMethod
 citizen->widget: start
-widget->core: start(commMethod, purpose)
+widget->core: start(authMethod, purpose)
 activate core
 core->core: getAttrRequest(purpose)
 core->auth_plugin: start(clientRedirect=conf.widgetUrl(purpose), attrRequest)
 activate auth_plugin
 auth_plugin-->core: ok(authUrl)
-core->widget: redirect(authUrl)
+core-->widget: redirect(authUrl)
 deactivate core
 widget-->citizen: redirect(authUrl)
 deactivate widget
@@ -48,7 +48,7 @@ activate auth_widget
 auth_widget-->citizen: page
 deactivate auth_widget
 
-citizen->auth_plugin: authenticate()
+citizen->auth_plugin: authenticate
 auth_plugin-->citizen: redirect(clientRedirect(attrsEncrypted))
 deactivate auth_plugin
 
@@ -68,12 +68,12 @@ citizen->widget: selectCommMethod
 citizen->widget: start
 widget->core: start(commMethod, purpose, attrsEncrypted)
 activate core
-core->comm_plugin: start(purpose, commMethod)
+core->comm_plugin: start(purpose, attrsEncrypted)
 activate comm_plugin
 comm_plugin-->core: ok(commUrl)
-core->widget: redirect(commUrl)
+core-->widget: redirect(commUrl)
 deactivate core
-widget->citizen: redirect(commUrl)
+widget-->citizen: redirect(commUrl)
 deactivate widget
 
 == Start conversation ==
@@ -82,8 +82,8 @@ citizen->comm_widget: load(commUrl)
 activate comm_widget
 comm_widget-->citizen: page
 
-citizen->comm_widget: startConversation()
-comm_widget->comm_plugin: startConversation()
+citizen->comm_widget: startConversation
+comm_widget->comm_plugin: startConversation
 
 comm_plugin->comm_plugin: assignAgent(purpose)
 comm_plugin->comm_plugin: createConversation(agentId)
