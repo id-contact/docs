@@ -1,0 +1,101 @@
+
+@startuml
+title ID-contact Core Global sequence v0.3.0
+
+actor Citizen as citizen
+participant "Core widget" as widget
+participant "ID Contact Core" as core
+participant "Auth plugin" as auth_plugin
+participant "Auth widget" as auth_widget
+participant "Comm plugin" as comm_plugin
+participant "Comm widget" as comm_widget
+actor Agent as agent
+
+== Initialize session ==
+
+activate citizen
+citizen->widget: navigate
+activate widget
+widget-->citizen: page
+citizen->widget: click
+widget->core: sessionOptions(purpose)
+activate core
+core->core: getAuthMethods(purpose)
+core->core: getCommMethods(purpose)
+core-->widget: ok(commMethods, authMethods),
+deactivate core
+widget-->citizen: commMethods, authMethods
+
+== Choose authentication and communication method ==
+
+citizen->widget: selectCommMethod
+citizen->widget: selectAuthMethod
+citizen->widget: start
+widget->core: start(commMethod, authMethod, purpose)
+activate core
+core->comm_plugin: start(purpose)
+activate comm_plugin
+comm_plugin-->core: ok(commUrl, attrUrl)
+core->core: getAttrRequest(purpose)
+core->auth_plugin: start(clientRedirect=commUrl, attrUrl, attrRequest)
+activate auth_plugin
+auth_plugin-->core: ok(authUrl)
+core->widget: redirect(authUrl)
+deactivate core
+widget-->citizen: redirect(authUrl)
+deactivate widget
+
+== Authentication ==
+
+citizen->auth_widget: load(authUrl)
+activate auth_widget
+auth_widget-->citizen: page
+deactivate auth_widget
+
+citizen->auth_plugin: authenticate()
+auth_plugin-->citizen: redirect(clientRedirect)
+auth_plugin->comm_plugin: attrUrl(attrsEncrypted, sessionFeedback)
+comm_plugin-->auth_plugin: ok()
+
+== Start conversation ==
+
+citizen->comm_widget: load(clientRedirect)
+activate comm_widget
+comm_widget-->citizen: page
+
+citizen->comm_widget: startConversation()
+comm_widget->comm_plugin: startConversation()
+
+comm_plugin->auth_plugin: sessionFeedback(hasActivity)
+auth_plugin-->comm_plugin: ok()
+
+comm_plugin->comm_plugin: assignAgent(purpose)
+comm_plugin->comm_plugin: createConversation(agentId)
+
+== Conversation ongoing ==
+comm_plugin->comm_plugin: decrypt(attrsEncrypted)
+comm_plugin->agent: newConversation(attrs)
+
+activate agent
+citizen<->agent: conversation
+
+== End conversation ==
+agent->comm_plugin: closeConversation
+comm_plugin->comm_widget: conversationClosed
+deactivate widget
+comm_widget->citizen: conversationClosed
+citizen->comm_widget: logout
+comm_widget->comm_plugin: logout
+comm_plugin->auth_plugin: sessionFeedback(logout)
+auth_plugin-->comm_plugin: ok
+deactivate auth_plugin
+comm_plugin-->comm_widget: ok
+comm_widget-->citizen: logged out
+deactivate comm_widget
+deactivate citizen
+agent->comm_plugin: deleteAttributes
+comm_plugin->agent: ok
+deactivate comm_plugin
+deactivate agent
+
+@enduml
