@@ -54,9 +54,8 @@ deactivate auth_widget
 
 citizen->auth_plugin: authenticate
 auth_plugin-->citizen: redirect(clientRedirect)
-auth_plugin->comm_plugin: attrUrl(attrsEncrypted)
+auth_plugin->comm_plugin: attrUrl(attrsEncrypted, sessionFeedback)
 comm_plugin-->auth_plugin: ok
-deactivate auth_plugin
 
 == Start conversation ==
 
@@ -66,6 +65,9 @@ comm_widget-->citizen: page
 
 citizen->comm_widget: startConversation
 comm_widget->comm_plugin: startConversation
+
+comm_plugin->auth_plugin: sessionFeedback(hasActivity)
+auth_plugin-->comm_plugin: ok
 
 comm_plugin->comm_plugin: assignAgent(purpose)
 comm_plugin->comm_plugin: createConversation(agentId)
@@ -88,6 +90,9 @@ agent->comm_plugin: deleteAttributes
 comm_plugin->agent: ok
 deactivate comm_plugin
 deactivate agent
+
+auth_plugin->auth_plugin: expiry
+deactivate auth_plugin
 
 
 @enduml

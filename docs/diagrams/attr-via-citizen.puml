@@ -1,6 +1,6 @@
 
 @startuml
-title ID-contact Core Global sequence v0.3.0
+title ID-contact Core Global sequence with attributes via citizen v0.3.0
 
 actor Citizen as citizen
 participant "Core widget" as widget
@@ -25,9 +25,6 @@ core->core: getCommMethods(purpose)
 core-->widget: ok(commMethods, authMethods),
 deactivate core
 widget-->citizen: commMethods, authMethods
-
-== Choose authentication and communication method ==
-
 citizen->widget: selectCommMethod
 citizen->widget: selectAuthMethod
 citizen->widget: start
@@ -35,9 +32,10 @@ widget->core: start(commMethod, authMethod, purpose)
 activate core
 core->comm_plugin: start(purpose)
 activate comm_plugin
-comm_plugin-->core: ok(commUrl, attrUrl)
+comm_plugin-->core: ok(commUrl)
+deactivate comm_plugin
 core->core: getAttrRequest(purpose)
-core->auth_plugin: start(clientRedirect=commUrl, attrUrl, attrRequest)
+core->auth_plugin: start(clientRedirect=commUrl, attrRequest)
 activate auth_plugin
 auth_plugin-->core: ok(authUrl)
 core-->widget: redirect(authUrl)
@@ -53,19 +51,18 @@ auth_widget-->citizen: page
 deactivate auth_widget
 
 citizen->auth_plugin: authenticate
-auth_plugin-->citizen: redirect(clientRedirect)
-auth_plugin->comm_plugin: attrUrl(attrsEncrypted)
-comm_plugin-->auth_plugin: ok
+auth_plugin-->citizen: redirect(clientRedirect(attrsEncrypted))
 deactivate auth_plugin
 
 == Start conversation ==
 
-citizen->comm_widget: load(clientRedirect)
+citizen->comm_widget: load(clientRedirect(attrsEncrypted))
 activate comm_widget
 comm_widget-->citizen: page
 
 citizen->comm_widget: startConversation
-comm_widget->comm_plugin: startConversation
+comm_widget->comm_plugin: startConversation(attrsEncrypted)
+activate comm_plugin
 
 comm_plugin->comm_plugin: assignAgent(purpose)
 comm_plugin->comm_plugin: createConversation(agentId)
