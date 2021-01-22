@@ -23,7 +23,7 @@ activate core
 core->core: getAuthMethod(purpose)
 core->core: getCommMethod(purpose)
 core->core: generateSessionToken
-core-->widget: ok(sessionToken, commEndpoints, authEndpoints, attrRequests),
+core-->widget: ok(\n\tsessionToken,\n\tcommEndpoints,\n\tauthEndpoints,\n\tattrRequests\n)
 deactivate core
 widget-->citizen: commEndpoints
 deactivate widget
@@ -48,7 +48,7 @@ widget->auth_plugin: getAuthRedirectURI()
 activate auth_plugin
 auth_plugin-->widget: authRedirectURI
 deactivate auth_plugin
-widget-->citizen: redirect(authRedirectURI, sessionToken, attrRequests, attrEncryptionKey, commRedirectURI)
+widget-->citizen: redirect(\n\tauthRedirectURI,\n\tsessionToken,\n\tattrRequests,\n\tattrEncryptionKey,\n\tcommRedirectURI\n)
 deactivate widget
 
 citizen->auth_widget: load(authRedirectURI, sessionToken)
@@ -64,7 +64,7 @@ auth_plugin->auth_plugin: getAttrs(credentials)
 auth_plugin->auth_plugin: encrypt(attrs, sessionToken, attrEncryptionKey)
 auth_plugin-->auth_widget: ok(attrsEncrypted)
 deactivate auth_plugin
-auth_widget->citizen: redirect(commRedirectURI, sessionToken, attrsEncrypted)
+auth_widget->citizen: redirect(\n\tcommRedirectURI,\n\tsessionToken,\n\tattrsEncrypted\n)
 deactivate auth_widget
 
 == Start conversation ==
