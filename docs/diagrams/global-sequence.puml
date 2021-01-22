@@ -18,25 +18,23 @@ citizen->widget: navigate
 activate widget
 widget-->citizen: page
 citizen->widget: click
-widget->core: newSession(purpose)
+widget->core: sessionOptions(purpose)
 activate core
-core->core: getAuthMethod(purpose)
-core->core: getCommMethod(purpose)
-core->core: generateSessionToken
-core-->widget: ok(sessionToken, commEndpoints, authEndpoints, attrRequests),
+core->core: getAuthMethods(purpose)
+core->core: getCommMethods(purpose)
+core-->widget: ok(commMethods, authMethods),
 deactivate core
-widget-->citizen: commEndpoints, authEndpoints
-deactivate widget
-citizen->widget: selectCommEndpoint
-activate widget
+widget-->citizen: commMethods, authMethods
+citizen->widget: selectCommMethod
 citizen->widget: selectAuthMethod
 citizen->widget: start
-widget->core: start(commEndpoint, authEndpoint)
+widget->core: start(commMethod, authMethod, purpose)
 activate core
 core->comm_plugin: start(purpose)
 activate comm_plugin
 comm_plugin-->core: ok(commUrl, attrUrl)
-core->auth_plugin: start(client_redirect=commUrl, result=attrUrl, attrRequest)
+core->core: getAttrRequest(purpose)
+core->auth_plugin: start(clientRedirect=commUrl, attrUrl, attrRequest)
 activate auth_plugin
 auth_plugin-->core: ok(authUrl)
 core->widget: redirect(authUrl)
@@ -62,17 +60,15 @@ deactivate auth_plugin
 citizen->comm_widget: load(clientRedirect)
 activate comm_widget
 comm_widget-->citizen: page
-deactivate comm_widget
 
 citizen->comm_widget: startConversation()
-activate comm_widget
-comm_widget->comm_plugin: startConversation(sessionToken, purpose)
+comm_widget->comm_plugin: startConversation()
 
-comm_plugin->comm_plugin: assignAgent(purpose, sessionToken)
-comm_plugin->comm_plugin: createConversation(agentId, sessionToken)
+comm_plugin->comm_plugin: assignAgent(purpose)
+comm_plugin->comm_plugin: createConversation(agentId)
 
 == Conversation ongoing ==
-comm_plugin->comm_plugin: decrypt(attrsEncrypted, attrDecryptionKey)
+comm_plugin->comm_plugin: decrypt(attrsEncrypted)
 comm_plugin->agent: newConversation(attrs)
 
 activate agent
@@ -80,9 +76,9 @@ citizen<->agent: conversation
 
 == End conversation ==
 agent->comm_plugin: closeConversation
-comm_plugin->widget: conversationClosed
+comm_plugin->comm_widget: conversationClosed
 deactivate widget
-widget->citizen: conversationClosed
+comm_widget->citizen: conversationClosed
 deactivate comm_widget
 deactivate citizen
 agent->comm_plugin: deleteAttributes
