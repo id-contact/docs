@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: ID Contact Connunication plugin
+  title: ID Contact Communication plugin
   description: >
     ID Contact Authentication plugin. Given a signed set of attributes, 
     it matches the session with an agent, sets up the conversation,
@@ -12,7 +12,7 @@ externalDocs:
   description: Repository
   url: 'https://tgrep.nl/id-contact/id-contact/'
 servers:
-  - url: 'https://core.idcontact.test.tweede.golf'
+  - url: 'https://comm.idcontact.test.tweede.golf'
     description: Local development
 tags:
   - name: Communication
@@ -20,10 +20,51 @@ security:
   - BasicAuth: []
 
 paths:
-  /todo:
+  /start_communication:
     post:
-      description: todo
+      tags:
+        - Communication
+      description: Start a communication session and provide a URI the user can use to start the session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                purpose:
+                  type: string
+                  description: String indicating for which purpose this communication session will be used.
+                attributes:
+                  type: string
+                  description: JWE containing attributes describing the client
+              required:
+                - purpose
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  client_url:
+                    type: string
+                    format: URI
+                    description: URI client should go to to start the session
+                  attr_url:
+                    type: string
+                    format: URI
+                    description: URI on which the plugin wants to receive authentication results for this session. If not given, these will be provided as arguments to the client uri, unless attributes were already provided in start request
+                required:
+                  - client_url
           description: todo
-          
+      callbacks:
+        attributes:
+          '{$response.body#/attr_url}':
+            $ref: './shared.openapi.yml#/components/callbacks/attr_url/path'
+        client:
+          '{$response.body#/client_url}':
+            $ref: './shared.openapi.yml#/components/callbacks/client_url/path'
+        session:
+          '{$callbacks.attr_url.response.body#/session_url}':
+            $ref: './shared.openapi.yml#/components/callbacks/session_url/path'
