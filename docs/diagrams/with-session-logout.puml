@@ -1,6 +1,6 @@
 
 @startuml
-title ID-contact Core Global sequence v0.3.0
+title ID-contact Core Global sequence with session logout v0.3.0
 
 actor Citizen as citizen
 participant "Core widget" as widget
