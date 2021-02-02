@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: ID Contact Shared definitions
+  description: >
+    Shared definitions between the various ID Contact components
+  contact:
+    email: henkdieter@tweedegolf.com
+  version: 0.0.1
+externalDocs:
+  description: Repository
+  url: 'https://tgrep.nl/id-contact/id-contact/'
+
+components:
+  callbacks:
+    attr_url:
+      path:
+        post:
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      enum: [succes, failed]
+                    attributes:
+                      type: string
+                      description: JWE containing attributes describing the client. Only present on succes
+                    session_url:
+                      type: string
+                      format: uri
+                      description: URI on which the authentication plugin wants to receive session updates
+                  required:
+                    - status
+          responses:
+            '200':
+              description: Your server should always accept this request. Any response is ignored
+    session_url:
+      path:
+        post:
+          parameters:
+            - in: query
+              name: type
+              required: true
+              schema:
+                type: string
+                enum: [user_active, logout]
+              description: Which type of activity the user has undertaken. Logout means user has indicated desire to logout, user_active means user has done something that warrants keeping the session alive
+          responses:
+            '200':
+              description: Authentication plugins should never error on this endpoint
+    client_url:
+      path:
+        get:
+          parameters:
+            - in: query
+              name: status
+              schema:
+                type: string
+                enum: [succes, failed]
+              description: Whether authentication failed or succeeded. Only present if auth_url was not specified.
+            - in: query
+              name: attributes
+              schema:
+                type: string
+              description: JWE containing attributes describing the client. Only present on succes and if auth_url was not specified.
+            - in: query
+              name: session_url
+              schema:
+                type: string
+                format: uri
+              description: URI on which the authentication plugin wants to receive session status updates, optional, only present if auth_url was not specified.
+          responses:
+            '200':
+              description: Plugin should serve user UI on this endpoint

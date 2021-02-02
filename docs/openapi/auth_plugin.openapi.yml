@@ -21,8 +21,10 @@ security:
   - BasicAuth: []
 
 paths:
-  /start-authentication:
+  /start_authentication:
     post:
+      tags:
+        - Authentication
       description: Start an authentication flow using this plugin
       requestBody:
         required: true
@@ -38,7 +40,7 @@ paths:
                     example: BSN
                   minItems: 1
                   description: List of attributes requested. Attributes are defined per installation, and the plugin is responsible for mapping these to what it can provide.
-                result_callback:
+                attr_url:
                   type: string
                   format: uri
                   example: "https://your.org/core/auth_result?id=1723"
@@ -65,44 +67,12 @@ paths:
                     description: URL client can use to start authenticating
                     example: "https://your.org/your_auth/start_auth?sessid=5"
       callbacks:
-        result:
-          '{$request.body#/result_callback}':
-            post:
-              requestBody:
-                required: true
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        status:
-                          type: string
-                          enum: [succes, failed]
-                        result:
-                          type: string
-                          description: Attribute JWE.
-                      required:
-                        - status
-              responses:
-                '200':
-                  description: Your server should always accept this request. Any response is ignored
+        attr_url:
+          '{$request.body#/result_url}':
+            $ref: './shared.openapi.yml#/components/callbacks/attr_url/path'
         continuation:
           '{$request.body#/continuation}':
-            get:
-              parameters:
-                - in: query
-                  name: result
-                  description: Result of session (only provided when no result callback is given)
-                  required: false
-                  schema:
-                    type: string
-                    enum: [succes, failed]
-                - in: query
-                  name: result
-                  description: JWE containing attributes provided by session (only provided when on succes, and when no result callback is given)
-                  required: false
-                  schema:
-                    type: string
-              responses:
-                '200':
-                  description: You should provide the client with the next step in the authentication flow
+            $ref: './shared.openapi.yml#/components/callbacks/client_url/path'
+        session_url:
+          '{$callbacks.attr_url.response.body#/session_url}':
+            $ref: './shared.openapi.yml#/components/callbacks/session_url/path'
