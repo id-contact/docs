@@ -1,5 +1,5 @@
 # ID Contact
-This repository contains PlantUML diagrams that can be rendered using PlantUML in [docs/diagrams](docs/diagrams). There are OpenAPI specifications available in [docs/openapi](docs/openapi).
+This repository contains PlantUML diagrams that can be rendered using PlantUML in [docs/diagrams](docs/diagrams). To do so, you can paste the file contents in [PlantUML's online render service](https://www.plantuml.com/plantuml/). There are OpenAPI specifications available in [docs/openapi](docs/openapi).
 
 ## Overview
 
