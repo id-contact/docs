@@ -13,7 +13,7 @@ actor Agent as agent
 
 rectangle "ID contact" {
     rectangle "Core widget" as core_widget
-    
+    rectangle "Matrix Widget" as matrix_widget
     cloud backend {
         rectangle "Core" as core
         rectangle "IRMA" <<Auth plugin>> as auth_irma
@@ -28,7 +28,6 @@ rectangle "Matrix client" as matrix_client
 rectangle "Connect client" as connect_client
 rectangle "IRMA UI" as irma
 rectangle "DigiD UI" as digid
-rectangle "Matrix Widget" as matrix_widget
 
 citizen<-->core_widget
 citizen<-r->irma
