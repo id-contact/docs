@@ -104,6 +104,14 @@ paths:
                 comm_method:
                   type: string
                   description: Tag of the chosen communication method.
+                comm_url:
+                  type: string
+                  format: url
+                  description: URL to redirect client to after authentication session for communication (exclusive with comm_method)
+                attr_url:
+                  type: string
+                  format: url
+                  description: URL to post authentication results to (only valid in combination with comm_url)
               required:
                 - purpose
       responses:
@@ -120,7 +128,6 @@ paths:
                     description: URL to redirect client to to start requested flow.
                 required:
                   - client_url
-
 components:
   securitySchemes:
     BasicAuth:
