@@ -6,8 +6,8 @@ module.exports = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'Tweede golf', // Usually your GitHub org/user name.
+  projectName: 'ID-Contact', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: 'My Site',
@@ -31,12 +31,12 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Style Guide',
-              to: '/',
+              label: 'Authentication plugins',
+              to: '/auth/overview',
             },
             {
-              label: 'Second Doc',
-              to: '/doc2/',
+              label: 'Communication plugins',
+              to: '/comm/overview',
             },
           ],
         },

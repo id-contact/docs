@@ -1,7 +1,23 @@
 module.exports = {
-  someSidebar: {
-    Concepts: ['concepts/attributes', 'concepts/purposes'],
-    Docusaurus: ['doc1', 'doc2', 'blas'],
-    Features: ['mdx'],
-  },
+  docs: [
+    {
+      type: 'doc',
+      id: 'index',
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      items: ['concepts/attributes', 'concepts/purposes'],
+    },
+    {
+      type: 'category',
+      label: 'Authentication Plugins',
+      items: ['auth/overview'],
+    },
+    {
+      type: 'category',
+      label: 'Communication Plugins',
+      items: ['comm/overview'],
+    },
+  ],
 };
