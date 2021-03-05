@@ -9,6 +9,9 @@ module.exports = {
   organizationName: 'Tweede golf', // Usually your GitHub org/user name.
   projectName: 'ID-Contact', // Usually your repo name.
   themeConfig: {
+    prism: {
+      additionalLanguages: ['http'],
+    },
     navbar: {
       title: 'My Site',
       logo: {
