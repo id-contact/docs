@@ -14,4 +14,4 @@ There is no pre-defined meaning of attribute tags, so authentication plugins nee
 
 ## Communication of attributes between components
 
-In order to reduce attack surface, attributes are stored signed and encrypted in a JWE when transfered between plugins in the ID-contact eco system. This reduces risk of attributes being read by parties not needing to obtain that information. It also allows us to, when neccessary or convenient, route this information via the end users client.
+In order to reduce attack surface, attributes are stored signed and encrypted in a JWT when transfered between plugins in the ID-contact eco system. This reduces risk of attributes being read by parties not needing to obtain that information. It also allows us to, when neccessary or convenient, route this information via the end users client.
