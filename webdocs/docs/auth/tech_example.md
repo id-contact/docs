@@ -41,7 +41,7 @@ This instructs the core that it needs to send the end-user to `https://auth-test
 
 ## Authentication proper
 
-After the initial exchange with the core, the core completes setup of the entire ID-Contact session, and then redirects the end-user to the authentication session. At this point, the end-users browser will load the `client_url` from the authentication plugin:
+After the initial exchange with the core, the core completes setup of the entire ID Contact session, and then redirects the end-user to the authentication session. At this point, the end-users browser will load the `client_url` from the authentication plugin:
 ```http
 GET /browser/WyJlbWFpbCJd/aHR0cDovL2NvbW0tdGVzdC5pZC1jb250YWN0LnRlc3QudHdlZWRlLmdvbGYvdWk=/aHR0cDovL2NvbW0tdGVzdDo4MDAwL2F1dGhfcmVzdWx0 HTTP/1.0
 Host: auth-test:8000
@@ -58,7 +58,7 @@ accept-encoding: gzip, deflate, br
 accept-language: en-US,en;q=0.9
 ```
 
-At this point, the authentication plugin can show any UI needed in the process of authenticating the user. Here, because we use the test authenticator, we don't need to do anything like that and can immediately complete the process of the authentication session. First, we redirect the user to the next step in the ID-Contact session in our HTTP response:
+At this point, the authentication plugin can show any UI needed in the process of authenticating the user. Here, because we use the test authenticator, we don't need to do anything like that and can immediately complete the process of the authentication session. First, we redirect the user to the next step in the ID Contact session in our HTTP response:
 ```http
 HTTP/1.0 303 See Other
 location: http://comm-test.id-contact.test.tweede.golf/ui

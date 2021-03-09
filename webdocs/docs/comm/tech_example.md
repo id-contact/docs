@@ -9,7 +9,7 @@ Below is an example of an entire communication interaction for a session involvi
 
 ## Setup
 
-For our communication plugin, a session starts with a request from the ID-Contact core to setup a communication session:
+For our communication plugin, a session starts with a request from the ID Contact core to setup a communication session:
 ```http
 POST /start_communication HTTP/1.1
 content-type: application/json
