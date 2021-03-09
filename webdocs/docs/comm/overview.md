@@ -5,19 +5,19 @@ sidebar_label: Overview
 slug: overview
 ---
 
-Communication plugins are responsible for managing the entire process of an end-user communicating with an agent. If a communication plugin involves some form of scheduling, ID-contact considers this process started from the moment the meeting is scheduled right up until the actual meeting has occured and is finished.
+Communication plugins are responsible for managing the entire process of an end-user communicating with an agent. If a communication plugin involves some form of scheduling, ID Contact considers this process started from the moment the meeting is scheduled right up until the actual meeting has occured and is finished.
 
 ## Communication plugin flow
 
-An ID-Contact communication session starts with a request by the ID-Contact core to setup a communication session for a specific purpose. The communication plugin then indicates where to send the end-user to start communication, and how it wants to receive the attributes.
+An ID Contact communication session starts with a request by the ID Contact core to setup a communication session for a specific purpose. The communication plugin then indicates where to send the end-user to start communication, and how it wants to receive the attributes.
 
 Once the user lands on the communication page, the communication plugin is responsible for further handling of the entire communication session. Attributes can (if indicated by the plugin) be delivered separately, in which case the communication plugin should not assume it already has received these at this point in time.
 
-The communication plugin is responsible for all further activity in the session, and can close it of its own volition. The ID-contact core does not need to be kept up to date on the session status. An exception to this occurs when the authentication plugin indicates a need for [session feedback](#session-feedback)
+The communication plugin is responsible for all further activity in the session, and can close it of its own volition. The ID Contact core does not need to be kept up to date on the session status. An exception to this occurs when the authentication plugin indicates a need for [session feedback](#session-feedback)
 
 ## Session feedback
 
-Some authentication plugins might need to be kept up-to-date on the current state of the complete ID-Contact session and whether the user has indicated a desire to logout. If this is the case, the communication plugin will receive an URL to which it must send such updates along with the attributes.
+Some authentication plugins might need to be kept up-to-date on the current state of the complete ID Contact session and whether the user has indicated a desire to logout. If this is the case, the communication plugin will receive an URL to which it must send such updates along with the attributes.
 
 When indicated, a communication plugin must:
  - Send activity indications each time the user has meaningfull interaction with the communication plugin which should extend authentication session duration.
@@ -36,7 +36,7 @@ The communication plugin can, either of its own volition or on instruction of an
 
 ### Authentication during communication
 
-The communication plugin can ask the ID-Contact core to (re-)authenticate a user during a communication session. This can be used for unauthenticated sessions, or when a significant pause has occured in a session.
+The communication plugin can ask the ID Contact core to (re-)authenticate a user during a communication session. This can be used for unauthenticated sessions, or when a significant pause has occured in a session.
 
 For this, it needs to provide the appropriate purpose and a URL for the end user to continue the communication on after authentication, as well as an indication how it wants to receive the attributes. It then receives an authentication url to which it needs to redirect the end user to start the authentication flow. After authentication is complete, the end-user will be redirected to the communication plugin, which will also then receive the attributes.
 

@@ -1,8 +1,8 @@
-In ID-Contact, communication plugins are responsible for all the communication between the end-user and agents. They are also responsible for presenting any attributes received to the agent.
+In ID Contact, communication plugins are responsible for all the communication between the end-user and agents. They are also responsible for presenting any attributes received to the agent.
 
 # Lifecycle of a conversation
 
-From the perspective of a communication plugin, an ID-contact session starts with a request from the core to start preparing a communication channel for the user. At this point, the plugin should make sufficient preparations to be able to provide a unique link for the end-user to go to for communication (this need not be an URL, but can be any type of URI, for example, tel urls are also allowed), as well as prepare an end point to receive a users attribute 
+From the perspective of a communication plugin, an ID contact session starts with a request from the core to start preparing a communication channel for the user. At this point, the plugin should make sufficient preparations to be able to provide a unique link for the end-user to go to for communication (this need not be an URL, but can be any type of URI, for example, tel urls are also allowed), as well as prepare an end point to receive a users attribute 
 
 ## Early reception of attributes
 
