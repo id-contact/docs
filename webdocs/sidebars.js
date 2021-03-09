@@ -12,12 +12,12 @@ module.exports = {
     {
       type: 'category',
       label: 'Authentication Plugins',
-      items: ['auth/overview', 'auth/tech_example'],
+      items: ['auth/overview', 'auth/tech_example', 'auth/api'],
     },
     {
       type: 'category',
       label: 'Communication Plugins',
-      items: ['comm/overview', 'comm/tech_example'],
+      items: ['comm/overview', 'comm/tech_example', 'comm/api'],
     },
   ],
 };
