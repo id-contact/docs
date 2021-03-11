@@ -18,16 +18,19 @@ components:
           requestBody:
             required: true
             content:
-              application/json:
+              application/jwt:              
                 schema:
+                  description: JWT containing as innermost claims these fields
                   type: object
                   properties:
                     status:
                       type: string
                       enum: [succes, failed]
                     attributes:
-                      type: string
-                      description: JWE containing attributes describing the client. Only present on succes
+                      type: object
+                      additionalProperties:
+                        type: string
+                      description: attributes describing the client. Only present on succes
                     session_url:
                       type: string
                       format: uri
@@ -56,22 +59,11 @@ components:
         get:
           parameters:
             - in: query
-              name: status
+              name: result
               schema:
                 type: string
-                enum: [succes, failed]
-              description: Whether authentication failed or succeeded. Only present if auth_url was not specified.
-            - in: query
-              name: attributes
-              schema:
-                type: string
-              description: JWE containing attributes describing the client. Only present on succes and if auth_url was not specified.
-            - in: query
-              name: session_url
-              schema:
-                type: string
-                format: uri
-              description: URI on which the authentication plugin wants to receive session status updates, optional, only present if auth_url was not specified.
+                format: JWT
+                description: JWT containing authentication result, see attribute url endpoint description for jwt schema.
           responses:
             '200':
               description: Plugin should serve user UI on this endpoint
