@@ -35,9 +35,9 @@ paths:
                 purpose:
                   type: string
                   description: String indicating for which purpose this communication session will be used.
-                attributes:
+                auth_result:
                   type: string
-                  description: JWE containing attributes describing the client
+                  description: JWT containing authentication result describing the client
               required:
                 - purpose
       responses:
