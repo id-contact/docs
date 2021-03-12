@@ -98,9 +98,9 @@ paths:
                 auth_method:
                   type: string
                   description: Tag of the chosen authentication method.
-                attributes:
+                auth_result:
                   type: string
-                  description: JWE containing the results of an earlier authentication session.
+                  description: JWT containing the results of an earlier authentication session.
                 comm_method:
                   type: string
                   description: Tag of the chosen communication method.
