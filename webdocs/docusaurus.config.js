@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'My Site',
+  title: 'ID-Contact',
   tagline: 'The tagline of my site',
   url: 'https://id-contact.github.io/docs',
   baseUrl: '/docs/',
@@ -13,11 +13,11 @@ module.exports = {
       additionalLanguages: ['http'],
     },
     navbar: {
-      title: 'My Site',
-      logo: {
+      title: 'ID-Contact',
+      /*logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
-      },
+      },*/
       items: [
         {
           to: '/',
@@ -44,7 +44,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Tweede Golf. Built with Docusaurus.`,
     },
   },
   presets: [
