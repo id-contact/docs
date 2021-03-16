@@ -1,8 +1,8 @@
 module.exports = {
   title: 'ID-Contact',
   tagline: 'The tagline of my site',
-  url: 'https://id-contact.github.io/docs',
-  baseUrl: '/docs/',
+  url: 'https://docs.idcontact.nl',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
