@@ -21,47 +21,55 @@ A JWS is a JSON Web Token whose contents are signed. It's primary goal is to ens
 
 ## JWTs in ID-Contact
 
-In ID-Contact, we use JWTs to provide authenticity and confidentiality during transmission of attribute values. At it's core, this JWT is intended to transmit the claim:
+In ID-Contact, we use JWTs to provide authenticity and confidentiality during transmission of authentication results. At it's core, this JWT is intended to transmit the claims:
 ```json
+"status":     "succes",
 "attributes": {
     "attr_1": "attr_value_1",
     "attr_2": "attr_value_2"
 }
 ```
+with, optionally, also a session url:
+```json
+"session_url":"http://example.com"
+```
 
 In the first layer, this claim is wrapped in a JWS to provide authenticity. This gives a total object
 ```json
 {
-  "typ": "JWT",
-  "alg": "RS256"
+    "typ": "JWT",
+    "alg": "RS256"
 }
 .
 {
-  "sub": "id-contact-attributes",
-  "attributes": {
-    "email": "bla"
-  }
+    "sub":"id-contact-attributes",
+    "status":"succes",
+    "attributes": {
+        "email": "bla"
+    },
+    "iat": 1615879800,
+    "exp": 1615880100
 }
 ```
 which, encoded and signed, becomes the token
 ```
-eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJpZC1jb250YWN0LWF0dHJpYnV0ZXMiLCJhdHRyaWJ1dGVzIjp7ImVtYWlsIjoiYmxhIn19.uGaKC065Tdaj9C_GqLfUHxRCbhqU22BxuikrLqwuMUt5JHStC0J6R5KBCdpVvGl8-DBLURjJ1svwe7-uN9On5plQdFbiwx3fwMD2Q0jiM2FGaf-wzeqOGqUwa9V27lqDkrAV-QfzXm8rBx6Cjk-MTtqZzBDUA44TfCVHHnk2LJCywN9SuoMCrfW00ZsOJYDyVLAliFeT6dbrSATAiUYcFz7LHSp485oOR41iFw1da4C0xDHip0oK5FJT6HZ4iw5FsX9KvC-e-oYaIPVu1oMWWpnilig2Xg0PySfwP3raKt_LdUbuwjYFPh5xxZyRMEFfXHJzpRrnig6kxSywXjyIIw
+eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJpZC1jb250YWN0LWF0dHJpYnV0ZXMiLCJzdGF0dXMiOiJzdWNjZXMiLCJhdHRyaWJ1dGVzIjp7ImVtYWlsIjoiYmxhIn0sImlhdCI6MTYxNTg3OTgwMCwiZXhwIjoxNjE1ODgwMTAwfQ.T4VliaytEhlf2PwOiKL0GY4IcmXd64A8Gl2P9w6Tl1mQzzAqnF8TV7IjrUSu3tvs1hAS3gR-WqAhxSKzv0WuzrewXv_uvkdabJ4HTTRsALbUk13jt1C4A5wCR-3tP4H6sV5M5ODdT83wFb1_huoU_GtnXCVdQwmQMtO5wteMA_XOHEv6ExCaBKPr8NQ6Txd5SHsUG48gZfWmSDSYB9mzD99CdfEQUxebvQ9x3hUQffRsIsE6MqNakD8h0W8qlabnPxZ2fe7Tn8AlZzTFNu3EW35JdvENJQ2r71QxJOdEVHxoBREBlFGpCAjXH1x6aRWi_GfUD8s5zEkB_xA1_InesQ
 ```
 
 To also achieve confidentiality, we make this the payload of a JWE:
 ```json
 {
-    "typ":"JWT",
-    "cty":"JWT",
-    "enc":"A128CBC-HS256",
-    "alg":"RSA-OAEP"
+    "typ": "JWT",
+    "cty": "JWT",
+    "enc": "A128CBC-HS256",
+    "alg": "RSA-OAEP"
 }
 .
 {
-    "njwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJpZC1jb250YWN0LWF0dHJpYnV0ZXMiLCJhdHRyaWJ1dGVzIjp7ImVtYWlsIjoiYmxhIn19.uGaKC065Tdaj9C_GqLfUHxRCbhqU22BxuikrLqwuMUt5JHStC0J6R5KBCdpVvGl8-DBLURjJ1svwe7-uN9On5plQdFbiwx3fwMD2Q0jiM2FGaf-wzeqOGqUwa9V27lqDkrAV-QfzXm8rBx6Cjk-MTtqZzBDUA44TfCVHHnk2LJCywN9SuoMCrfW00ZsOJYDyVLAliFeT6dbrSATAiUYcFz7LHSp485oOR41iFw1da4C0xDHip0oK5FJT6HZ4iw5FsX9KvC-e-oYaIPVu1oMWWpnilig2Xg0PySfwP3raKt_LdUbuwjYFPh5xxZyRMEFfXHJzpRrnig6kxSywXjyIIw"
+    "njwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJpZC1jb250YWN0LWF0dHJpYnV0ZXMiLCJzdGF0dXMiOiJzdWNjZXMiLCJhdHRyaWJ1dGVzIjp7ImVtYWlsIjoiYmxhIn0sImlhdCI6MTYxNTg3OTgwMCwiZXhwIjoxNjE1ODgwMTAwfQ.T4VliaytEhlf2PwOiKL0GY4IcmXd64A8Gl2P9w6Tl1mQzzAqnF8TV7IjrUSu3tvs1hAS3gR-WqAhxSKzv0WuzrewXv_uvkdabJ4HTTRsALbUk13jt1C4A5wCR-3tP4H6sV5M5ODdT83wFb1_huoU_GtnXCVdQwmQMtO5wteMA_XOHEv6ExCaBKPr8NQ6Txd5SHsUG48gZfWmSDSYB9mzD99CdfEQUxebvQ9x3hUQffRsIsE6MqNakD8h0W8qlabnPxZ2fe7Tn8AlZzTFNu3EW35JdvENJQ2r71QxJOdEVHxoBREBlFGpCAjXH1x6aRWi_GfUD8s5zEkB_xA1_InesQ"
 }
 ```
 which, encoded and encrypted, results in the final JWT that is exchanged:
 ```
-eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiUlNBLU9BRVAifQ.MPsMulGweRiFn-bGa8xC_MYal6Ozw93fjSv7FHCzGP2tViSC5zZNkbyUIl4f8FYBvoaN4t8QalpWVEdK3M-KyefTSW8YSmqFmastN_DEoISB4vPWTRrqT_xx3lM425dLYfIyMcosn9Tro8vLpJ-D74tkb-_WOZzv8mS63nQ5viCFURrapR1vTDZls8Qzx8DfywHCoFK4hwri8dZRQkPopLqp0ojQiAEyTnanGmRzjUM9wwrciNgG1b8V0plYhzB5MBpIscvVbeVqoKMfpBNBDJFRtgCbXrCbRj5g3ursIkflzbZAh5igSTCgNtgZ7TGPnoCmkf_VLBojx6SSN3Nl2g.oi6jthGyKogzcvdTW50byQ.GRoVEXg26eMKpMaek7ETHDgcF8aRl4icoKZCpUj69F9pl14dABpGwWKeoCveWhB6u8I4j1OhFPSDrBcbZwcXHI6bsgGnxzSWrgvDb9p5RtRrV9LCLGMPCjMHBWkEEQt4vRak_Qs6XCbB5QsRLG_EdUiNu9I2BDGh4WfpA_Q7xAwzGu-u6exhCXwQ9agaSSfqq8op8pRiqM5bBUgcyCBr_x_IslzZ3rTvUD98tCL6PJ2JYykO0K_NDq9jbt1U2yoRQiLixip6rX2Qy5ih8QNOYjiOIYy08A5JkbqlGRej-7DISIlqq0IiqfdxgWYDY0d2LFwbMy9RxskJ3pTWdToqpB515ROqqVKFRROMQISaUZlqbrZmWGuW--Nwhm-aqj2Eud5w3SKj_z4MeXCzzIqdRs0msY53QCS9v-3URX1RMW-P2YRjn9IDYHuRljutGU7hex40S4skHkAnciDeOz-2zzlXdesTOi4gc1yOjymy3oiIQ29eAZPFGqDnYZItI8564sN9iTWuMtZyYV52pdo2fY6aFU5289kJEJrtL4CKsSWr2QOpzbmXwA6aJA8AC68c9s65ci1T6aJQOmoboBE9kvudeo4_AYSR1bTn-GawUBQ-dVxmiE6K4P_1vSnstB9j.2KVp-bKtE3GrhX2UstY6LQ
+eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiUlNBLU9BRVAifQ.j9ANvlSvi8AjqQ2NjX0OpqZvmL5pG4kH8O6BEtoui4KukDn2nIfgiGNV7fR3rmWrvZJ2E5qOoNQy6TMYsQYvdA4gdQkQd8VqkXIHGH0AFTBDnTtAVPuAc9iTFiJ5KZzUd_kTDkhrIyX4aWGjhwR4jk7gGdTlXMnR-tK2K9n5C6XTiuM-i-D39lSpsujQmkHzkmGkoqpNRYpulEUphLoov9U0C1yCHO0ZGR1SeWIM0STyh6H0cUPZEWneNOQsVeWGGDAOe1l7EHznr2CP8i_lXCIiSj4hJ8bB5ZxjbOeTYj8XMt7SpTTBAHuFerO6SqCLXa89rHymNgIA12itxrNDAg.BsX5IzSKDzvKz36VOs74wQ.R89gy8vBW0rwslJblj4uQYV-3eP9N_aOxeE23rxA44uxDFF-Q0VyFv-G1TWHVnhJvsw8qoX8JaG8IXr4VK_m7TbJmL6KMA2-_BD8kO-DHQJc4_d6sS-BZ4YYuPjJnSuAoN7znwFdiyyjdq34r8drOBnL2rroPRR62_QkXc4LZBYAWgRQNLoaZmUVsnIFekhSo2wPoODpTP5AJOzfbHXMOMThnW86Mgyc6eM2kvojjnTqsnL3Wt2NZS0ubfzJ8C5nYuGFnfaLUoLUhnYnNGksmInX_2Vb92Ddn5lkOROVaoE-31pZaKffkCyjSks9vpZ-bZPnTvBZfZ6eMK2G1oyeuL4awIJNXI0aR0pW7HREhm6S6nsp7HANtPnUfy2ZdAmTTKP8SSoXVRQHkEZODgGq38rBD2OpjFwQepmqY-Ie5cHAWXw-k3pnnxon45TUXrJh3x3MUdPETSHEoUtpzbueOXtqXjeHtVK8OjU7K25qc7TdcpFtMdo5uZ22KcNVXBjZvxXEigzrumUgOcc8Z5oHo7bujjvgWwuZNv4TppJs2Q6YVb-_AaKWM02WhCDQoMiiaGBbaV-2oifAmzkfw-14DOkzJ-eoZl3JLn7IP0rST2pS_iLztl_QQCynMrN6r0ipm8-XCQU2pOwLGlNOd6_usy0vy1zhck2UQVECz4ZoIJ5WwSdmP6-Iwn21vsxNm6_FFrdYIt7Buu8JGMLLBEfzSg.hCcQGm2i-px5kW2UzPhmkQ
 ```
