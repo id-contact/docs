@@ -6,8 +6,8 @@ module.exports = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'Tweede golf', // Usually your GitHub org/user name.
-  projectName: 'ID-Contact', // Usually your repo name.
+  organizationName: 'id-contact', // Usually your GitHub org/user name.
+  projectName: 'docs', // Usually your repo name.
   themeConfig: {
     prism: {
       additionalLanguages: ['http'],
