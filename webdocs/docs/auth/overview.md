@@ -13,7 +13,7 @@ The authentication part of a flow starts with a request by the ID Contact core f
 
 The authentication plugin is then expected to provide the Core with a URL which the end-user can use to initiate the authentication flow. Once the user has navigated to this URL, it is the responsibility of the authentication plugin to guide them through the process of authentication, and, upon completion, send them on to the indicated location after completion of the authentication flow.
 
-At completion, the authentication plugin is also responsible for sending the results of the session (whether succesfull or failed) to the rest of the ID Contact ecosystem. Unless it needs to maintain [session state](#session-updates), its involvement in any flow finishes after doing this.
+At completion, the authentication plugin is also responsible for sending the results of the session (whether successful or failed) to the rest of the ID Contact ecosystem. Unless it needs to maintain [session state](#session-updates), its involvement in any flow finishes after doing this.
 
 ## Implementation options
 

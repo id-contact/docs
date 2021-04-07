@@ -5,15 +5,15 @@ sidebar_label: JWTs
 slug: jwt
 ---
 
-In ID-Contact, we use JSON Web Tokens (JWT) to communicate attributes between the various components. This allows passing of attributes and attribute values through components that aren't neccessarily trusted.
+In ID-Contact, we use JSON Web Tokens (JWT) to communicate attributes between the various components. This allows passing of attributes and attribute values through components that aren't necessarily trusted.
 
 ## Introduction to JWTs, JWEs and JWSs
 
-Before we go into how JWTs are used in ID-Contact, it is important to go over what JWTs are, and what the various names for them mean. First, note that JWTs come in two flavors: JSON Web Encryption (JWE) and JSON Web Signature (JWS). Both are JWTs, but each focusses on a different security goal.
+Before we go into how JWTs are used in ID-Contact, it is important to go over what JWTs are, and what the various names for them mean. First, note that JWTs come in two flavours: JSON Web Encryption (JWE) and JSON Web Signature (JWS). Both are JWTs, but each focuses on a different security goal.
 
 ### JWEs
 
-A JWE is a JSON Web Token whose actual contents are encrypted. It's primary goal is to hide the actual content of the token from unauthorized parties. In other words, JWEs ensure confidentiality.
+A JWE is a JSON Web Token whose actual contents are encrypted. Its primary goal is to hide the actual content of the token from unauthorized parties. In other words, JWEs ensure confidentiality.
 
 ### JWSs
 
@@ -29,7 +29,7 @@ In ID-Contact, we use JWTs to provide authenticity and confidentiality during tr
     "attr_2": "attr_value_2"
 }
 ```
-with, optionally, also a session url:
+with, optionally, also a session URL:
 ```json
 "session_url":"http://example.com"
 ```

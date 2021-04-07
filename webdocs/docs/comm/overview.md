@@ -5,7 +5,7 @@ sidebar_label: Overview
 slug: overview
 ---
 
-Communication plugins are responsible for managing the entire process of an end-user communicating with an agent. If a communication plugin involves some form of scheduling, ID Contact considers this process started from the moment the meeting is scheduled right up until the actual meeting has occured and is finished.
+Communication plugins are responsible for managing the entire process of an end-user communicating with an agent. If a communication plugin involves some form of scheduling, ID Contact considers this process started from the moment the meeting is scheduled right up until the actual meeting has occurred and is finished.
 
 ## Communication plugin flow
 
@@ -20,25 +20,25 @@ The communication plugin is responsible for all further activity in the session,
 Some authentication plugins might need to be kept up-to-date on the current state of the complete ID Contact session and whether the user has indicated a desire to logout. If this is the case, the communication plugin will receive an URL to which it must send such updates along with the attributes.
 
 When indicated, a communication plugin must:
- - Send activity indications each time the user has meaningfull interaction with the communication plugin which should extend authentication session duration.
+ - Send activity indications each time the user has meaningful interaction with the communication plugin which should extend authentication session duration.
  - Display a Logout button, and upon clicking, send a logout update.
-It is up to the communication plugin to decide what entails a "meaningfull interaction" for its communication method.
+It is up to the communication plugin to decide what entails a "meaningful interaction" for its communication method.
 
-Any updates to the session state url must be generated and sent server-side, as the update URL may not be reachable publicly.
+Any updates to the session state URL must be generated and sent server-side, as the update URL may not be reachable publicly.
 
 ## Implementation options
 
 ### Unauthenticated communication
 
-A communication plugin may support unauthenticated communication sessions. For such a session, the user will be immediately redirected to the commmunication landing page, and the communication plugin will not receive any attributes.
+A communication plugin may support unauthenticated communication sessions. For such a session, the user will be immediately redirected to the communication landing page, and the communication plugin will not receive any attributes.
 
 The communication plugin can, either of its own volition or on instruction of an agent, decide to authenticate the user at a later moment during the flow. This can be done with [authentication during communication](#authentication-during-communication)
 
 ### Authentication during communication
 
-The communication plugin can ask the ID Contact core to (re-)authenticate a user during a communication session. This can be used for unauthenticated sessions, or when a significant pause has occured in a session.
+The communication plugin can ask the ID Contact core to (re-)authenticate a user during a communication session. This can be used for unauthenticated sessions, or when a significant pause has occurred in a session.
 
-For this, it needs to provide the appropriate purpose and a URL for the end user to continue the communication on after authentication, as well as an indication how it wants to receive the attributes. It then receives an authentication url to which it needs to redirect the end user to start the authentication flow. After authentication is complete, the end-user will be redirected to the communication plugin, which will also then receive the attributes.
+For this, it needs to provide the appropriate purpose and a URL for the end user to continue the communication on after authentication, as well as an indication how it wants to receive the attributes. It then receives an authentication URL to which it needs to redirect the end user to start the authentication flow. After authentication is complete, the end-user will be redirected to the communication plugin, which will also then receive the attributes.
 
 Communication plugins should use authentication during communication if their plugin has some form of scheduling with significant periods of time between scheduling and the actual appointment, or when the communication plugin cannot guarantee identity of the user is preserved among all its steps. This is to prevent leaking of personal information should a session be accidentally leaked.
 
