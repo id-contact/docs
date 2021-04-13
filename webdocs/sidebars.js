@@ -5,6 +5,10 @@ module.exports = {
       id: 'index',
     },
     {
+      type: 'doc',
+      id: 'setup',
+    },
+    {
       type: 'category',
       label: 'Concepts',
       items: ['concepts/attributes', 'concepts/purposes'],
