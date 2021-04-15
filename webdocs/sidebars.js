@@ -5,10 +5,6 @@ module.exports = {
       id: 'index',
     },
     {
-      type: 'doc',
-      id: 'setup',
-    },
-    {
       type: 'category',
       label: 'Concepts',
       items: ['concepts/attributes', 'concepts/purposes'],
@@ -22,6 +18,15 @@ module.exports = {
       type: 'category',
       label: 'Communication Plugins',
       items: ['comm/overview', 'comm/tech_example', 'comm/api'],
+    },
+    {
+      type: 'doc',
+      id: 'setup',
+    },
+    {
+      type: 'category',
+      label: 'ID Contact configuration',
+      items: ['configuration/core', 'configuration/auth_test', 'configuration/comm_test'],
     },
   ],
 };
