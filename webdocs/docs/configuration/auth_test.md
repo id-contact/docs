@@ -13,7 +13,7 @@ The test authentication plugin does not support telephone redirect URLs. When us
 
 ## General configuration structure
 
-The authentication test plugin is based on [Rocket](rocket.rs), and its configuration system is based on the system provided by Rocket. We will describe here the properties needed by an end-user, a complete overview can be found in [the rocket documentation](https://rocket.rs/master/guide/configuration/).
+The authentication test plugin is based on [Rocket](https://rocket.rs), and its configuration system is based on the system provided by Rocket. We will describe here the properties needed by an end-user, a complete overview can be found in [the rocket documentation](https://rocket.rs/master/guide/configuration/).
 
 This configuration system is based on 3 tiers:
  - Defaults baked into the server
@@ -42,7 +42,7 @@ The profile `release` is the default selected profile used on release builds of 
 
 ### Configuration file format
 
-Any provided configuration file is interpreted as [TOML](toml.io). This is a configuration file format somewhat similar to INI files, but with a more constrained specification. For example:
+Any provided configuration file is interpreted as [TOML](https://toml.io). This is a configuration file format somewhat similar to INI files, but with a more constrained specification. For example:
 ```toml
 [debug]
 port = 8001
