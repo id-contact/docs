@@ -18,7 +18,10 @@ Thus, we will need to setup 3 components:
  - The ID Contact authentication test plugin.
  - The ID Contact communication test plugin.
 
-And configure these to work with the test_purpose purpose, and the test_attribute attribute.
+And configure these to work with the test_purpose purpose, and the test_attribute attribute. Furthermore, as all of these are http servers, we will need to assign them ports in order to avoid conflict. We will use the following assignment:
+ - Core: port 8000
+ - Authentication test plugin: 8001
+ - Communication test plugin: 8002
 
 ## Key material
 
