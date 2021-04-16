@@ -5,13 +5,13 @@ sidebar_label: Local testing setup
 slug: setup
 ---
 
-This guide aimes to provide a complete introduction to setting up a first ID Contact environment. It provides guidance on an initial setup and configuration for the core, an authentication plugin and a communication plugin.
+This guide aims to provide a complete introduction to setting up a first ID Contact environment. It provides guidance on an initial setup and configuration for the core, an authentication plugin and a communication plugin.
 
 The resulting setup can be used as a starting point for further experimentation with the ID Contact ecosystem. In particular, our use here of the test authentication and communication plugins makes this setup particularly well suited for as a starting point for a development environment for new ID Contact plugins.
 
 ## Design
 
-As ID Contact is quite flexible, before we start setting up the various components we will first need to decide on what we want. In this tutorial we will make it our goal to set up a single flow, test_purpose, for which users need to reveal their test_attribute. We want to enable the test authentication plugin for this flow, as well as the test communication plugin, but wont focus on further plugins.
+As ID Contact is quite flexible, before we start setting up the various components we will first need to decide on what we want. In this tutorial we will make it our goal to set up a single flow, test_purpose, for which users need to reveal their test_attribute. We want to enable the test authentication plugin for this flow, as well as the test communication plugin, but won't focus on further plugins.
 
 Thus, we will need to setup 3 components:
  - The ID Contact core.
@@ -69,7 +69,7 @@ MbJ/NNQiD63NEcL9VXwT96sMx2tnduOq4sYzu84kwPQ4ohxmPt/7xHU3L8SGqoec
 Bs6neR/sZuHzNm8y/xtxj2ZAEw==
 -----END PRIVATE KEY-----
 ```
-Note that, since the private key of this key pair is publicly known, this particular key pair should NEVER be used outside of testing/development environments.
+**Note that, since the private key of this key pair is publicly known, this particular key pair should NEVER be used outside of testing/development environments.**
 
 ## Setting up the authentication test plugin
 
@@ -87,9 +87,9 @@ We need to tell the plugin where it is located, and on which port we want it to 
 server_url = "http://localhost:8001"
 port = 8001
 ```
-As per our design above, we set the port to 8001 to give space for the other two servers
+As per our design above, we set the port to 8001 to give space for the other two servers.
 
-Then, we need to tell it about the attributes in our system, and what test values it should provide for them
+Then, we need to tell it about the attributes in our system, and what test values it should provide for them:
 ```toml
 [global.attributes]
 test_attribute = "test_attribute_value"
@@ -217,7 +217,7 @@ git clone https://github.com/id-contact/comm-test
 cd comm-test
 ```
 
-This plugin also needs configuration, so we make a config file `config.toml`, this time in the comm-test directory
+This plugin also needs configuration, so we make a config file `config.toml`, this time in the comm-test directory.
 
 We again start with the basics: which port the server should use and where it is:
 ```toml
@@ -226,7 +226,7 @@ server_url = "http://localhost:8002"
 internal_url = "http://localhost:8002"
 port = 8002
 ```
-As per our design above, we set the port to 8002 to give space for the other two servers
+As per our design above, we set the port to 8002 to give space for the other two servers.
 
 The only other information the communication test plugin needs are the keys to decrypt and verify authentication results. Again, using the example keys from above, we get
 ```
@@ -454,4 +454,4 @@ Meanwhile, the communication test plugin will have logged the decoded authentica
 Decoded: AuthResult { status: Succes, attributes: Some({"test_attribute": "test_attribute_value"}), session_url: None }
 ```
 
-Congratulations! Seeing the above indicates that your setup now works correctly. You can experiment further by looking at the configuration options described in (TODO) and (TODO).
+Congratulations! Seeing the above indicates that your setup now works correctly. You can experiment further by looking at the configuration options described in the [authentication test plugin](configuration/auth_test.md) and [communication test plugin](configuration/comm_test.md) documentation.

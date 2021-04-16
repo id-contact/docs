@@ -9,14 +9,14 @@ This document describes the configuration options available for the ID Contact c
 
 ## General configuration structure
 
-The authentication test plugin is based on [Rocket](https://rocket.rs), and its configuration system is based on the system provided by Rocket. We will describe here the properties needed by an end-user, a complete overview can be found in [the rocket documentation](https://rocket.rs/master/guide/configuration/).
+The authentication test plugin is based on [Rocket](https://rocket.rs), and its configuration system is based on the system provided by Rocket. We will describe here the properties needed by an end user, a complete overview can be found in [the rocket documentation](https://rocket.rs/master/guide/configuration/).
 
 This configuration system is based on 3 tiers:
  - Defaults baked into the server
  - Configuration provided through the configuration file specified in the `ROCKET_CONFIG` environment variable (or the default filename `Rocket.toml`)
  - Configuration overrides provided through environment variables with names starting with `ROCKET_`.
 
-Within this structures, defaults have the lowest priority (are used only when no other source defines that particular setting), and environment variables have the highest priority (always override whatever value the other layers have for a setting).
+Within these structures, defaults have the lowest priority (are used only when no other source defines that particular setting), and environment variables have the highest priority (always override whatever value the other layers have for a setting).
 
 ### Profiles
 
@@ -70,7 +70,7 @@ The `port` and `address` parameters together determine the interface on which th
 
 `workers` and `keep_alive` influence the resource utilization of the server. For most use cases, the default values will be fine, but if neccessary these can be tuned.
 
-The ammount of logging done by the server is determined through the `log_level` parameter. The values listed give progressively more detailed information.
+The amount of logging done by the server is determined through the `log_level` parameter. The values listed give progressively more detailed information.
 
 ## Authentication methods
 
