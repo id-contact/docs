@@ -19,5 +19,14 @@ module.exports = {
       label: 'Communication Plugins',
       items: ['comm/overview', 'comm/tech_example', 'comm/api'],
     },
+    {
+      type: 'doc',
+      id: 'setup',
+    },
+    {
+      type: 'category',
+      label: 'ID Contact configuration',
+      items: ['configuration/core', 'configuration/auth_test', 'configuration/comm_test'],
+    },
   ],
 };

@@ -10,7 +10,7 @@ module.exports = {
   projectName: 'docs', // Usually your repo name.
   themeConfig: {
     prism: {
-      additionalLanguages: ['http'],
+      additionalLanguages: ['http', 'toml'],
     },
     navbar: {
       title: 'ID-Contact',
