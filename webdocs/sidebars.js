@@ -20,6 +20,11 @@ module.exports = {
       items: ['comm/overview', 'comm/tech_example', 'comm/api'],
     },
     {
+      type: 'category',
+      label: 'Sample Plugins',
+      items: ['sample_plugins/amazon_connect'],
+    },
+    {
       type: 'doc',
       id: 'setup',
     },
