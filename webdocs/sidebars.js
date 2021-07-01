@@ -11,6 +11,15 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Sessions',
+      items: ['sessions/full', 'sessions/auth_during_comm'],
+    },
+    {
+      type: 'doc',
+      id: 'core_api',
+    },
+    {
+      type: 'category',
       label: 'Authentication Plugins',
       items: ['auth/overview', 'auth/tech_example', 'auth/api'],
     },
