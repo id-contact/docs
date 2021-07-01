@@ -1,6 +1,6 @@
 ---
 id: full
-title: Full ID-Contact session
+title: Full ID Contact session
 sidebar_label: Full
 slug: full
 ---
