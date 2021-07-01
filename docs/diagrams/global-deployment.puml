@@ -1,5 +1,5 @@
 @startuml
-title ID-contact Core Global deployment v0.3
+title ID-contact Core Global deployment v0.4
 skinparam rectangle {
     roundCorner<<Auth plugin>> 25
 }
@@ -12,42 +12,68 @@ actor Citizen as citizen
 actor Agent as agent
 
 rectangle "ID contact" {
-    rectangle "Core widget" as core_widget
-    rectangle "Matrix Widget" as matrix_widget
-    cloud backend {
+
+
+    rectangle "Agent frontend applications" as frontend_agent {
+        rectangle "Matrix agent interface" as matrix_client
+        rectangle "Amazon Connect agent interface" as connect_client
+        rectangle "24Sessions agent interface" as 24sessions_attr
+    }
+
+    rectangle "Client frontend applications" as frontend_client {
+        rectangle "Core widget" as core_widget
+        rectangle "Matrix Widget" as matrix_widget
+        rectangle "IRMA QR interface" as irma_qr
+        rectangle "Authentication choice interface" as auth_select
+    }
+
+    rectangle "Backend services" as backend {
         rectangle "Core" as core
         rectangle "IRMA" <<Auth plugin>> as auth_irma
-        rectangle "DigiD Routeringsvoorziening" <<Auth plugin>> as auth_digid
-
+        rectangle "DigiD" <<Auth plugin>> as auth_digid
         rectangle "Amazon Connect" <<Comm plugin>> as comm_connect
         rectangle "Matrix" <<Comm plugin>> as comm_matrix
+        rectangle "24Sessions" <<Comm plugin>> as comm_24sessions
     }
 }
 
-rectangle "Matrix client" as matrix_client
-rectangle "Connect client" as connect_client
-rectangle "IRMA UI" as irma
-rectangle "DigiD UI" as digid
+cloud "24Sessions" as 24sessions
+cloud "IRMA" as irma_app
+cloud "DigiD" as digid_login
 
-citizen<-->core_widget
-citizen<-r->irma
-citizen<-r->digid
-citizen<-->matrix_widget
+citizen-up->core_widget
 
-agent<-->connect_client
-agent<-->matrix_client
+citizen-up->irma_qr
+citizen->irma_app
+citizen->digid_login
 
-core_widget<-->core
-auth_digid<-->core
-auth_irma<-->core
-comm_matrix<-u->core
-comm_connect<-u->core
+citizen-up->matrix_widget
+citizen--up->auth_select
+citizen-left->24sessions
 
-digid<->auth_digid
-irma<->auth_irma
+agent-->matrix_client
+agent-->24sessions_attr
+agent-->connect_client
+agent->24sessions
 
-matrix_client<-->comm_matrix
-matrix_widget<--->comm_matrix
-connect_client<-->comm_connect
+core<--core_widget
+core<--auth_select
+core->auth_irma
+core->auth_digid
+core-left->comm_24sessions
+core-->comm_matrix
+core-left->comm_connect
 
+comm_matrix-up->matrix_client
+comm_matrix<--matrix_widget
+
+comm_24sessions<-24sessions
+comm_24sessions-up-->24sessions_attr
+
+comm_connect<-up-connect_client
+
+auth_digid<-up->digid_login
+
+auth_irma<--irma_qr
+auth_irma<-up-irma_app
 @enduml
