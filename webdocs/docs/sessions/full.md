@@ -71,7 +71,7 @@ date: Thu, 01 Jul 2021 08:27:43 GMT
 
 ## Initiating session
 
-The initiator then present the authentication and communication options to the end user and let them choose their preferred authentication and communication method. Once this has been completed and the end user has indicated to start the actual session, the initiator uses the core's [`start` endpoint](../core_api). Continuing the above example, if the end user has chosen the `irma` authentication method and the `chat` communication method, the initiator then sends the core
+The initiator then presents the authentication and communication options to the end user and lets them choose their preferred authentication and communication method. Once this has been completed and the end user has indicated to start the actual session, the initiator uses the core's [`start` endpoint](../core_api). Continuing the above example, if the end user has chosen the `irma` authentication method and the `chat` communication method, the initiator then sends the core
 ```http
 POST /start HTTP/1.0
 Host: core:8000
