@@ -31,7 +31,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Sample Plugins',
-      items: ['sample_plugins/amazon_connect'],
+      items: ['sample_plugins/amazon_connect', 'sample_plugins/digid'],
     },
     {
       type: 'doc',
