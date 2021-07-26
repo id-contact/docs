@@ -5,7 +5,7 @@ sidebar_label: DigiD
 slug: digid
 ---
 
-The DigiD plugin is designed to authenticate the end-user using the dutch DigiD government authentication, and then fetching further information on the end-user from the dutch BRP through a separate BRP interface.
+The DigiD plugin is designed to authenticate the end-user using the Dutch DigiD government authentication, and then fetch further information on the end-user from the Dutch BRP through a separate BRP interface.
 
 ### Note
 
@@ -123,4 +123,3 @@ A value in the object returned by the BRP service is identified by following a `
     }
 }
 ```
-
