@@ -64,7 +64,7 @@ General information needed by the server, such as where it is publically reachab
 
 | key                | environment variable     | description                                                                     |
 | ------------------ | ------------------------ | ------------------------------------------------------------------------------- |
-| ServerURL          | DIGID_SERVERURL          | URL on which end-users can reach this plugin's server.                          |
+| ServerURL          | DIGID_SERVERURL          | URL on which end users can reach this plugin's server.                          |
 | DatabaseConnection | DIGID_DATABASECONNECTION | Postgres URL (including database name) for the database this server should use. |
 
 ### SAML Configuration
