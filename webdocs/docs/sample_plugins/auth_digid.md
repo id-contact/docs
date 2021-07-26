@@ -75,7 +75,7 @@ Configuration for the DigiD saml connection
 | ------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | SamlCertificate    | DIGID_SAMLCERTIFICATE | Path of the (public) certificate to include in the servers service provider metadata. Should be in PEM format.           |
 | SamlKey            | DIGID_SAMLKEY         | Path of the private key for the SAML service provider certificate. Should be in PEM format.                              |
-| IDPMetadataURL     | DIGID_IDPMETADATAURL  | URL on which the plugin can find the digid identity provider's metadata.                                                 |
+| IDPMetadataURL     | DIGID_IDPMETADATAURL  | URL on which the plugin can find the DigiD identity provider's metadata.                                                 |
 | EntityID           | DIGID_ENTITYID        | (optional) Entity ID to use in the metadata for this plugin's service provider. ServerURL will be used when not present. |
 
 ### BRP Connection
