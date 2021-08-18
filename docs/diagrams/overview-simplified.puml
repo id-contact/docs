@@ -1,0 +1,40 @@
+@startuml
+title ID-contact Core overview simplified v0.1
+skinparam rectangle {
+    roundCorner<<Auth plugin>> 25
+}
+
+skinparam rectangle {
+    roundCorner<<Comm plugin>> 10
+}
+
+actor Citizen as citizen
+actor Agent as agent
+
+rectangle "ID contact" {
+    rectangle "Core UI" as core_widget
+    cloud backend {
+        rectangle "Core" as core
+        rectangle "DigiD" <<Auth plugin>> as auth_digid
+
+        rectangle "Amazon Connect" <<Comm plugin>> as comm_connect
+    }
+}
+
+rectangle "Connect client" as connect_client
+rectangle "DigiD UI" as digid
+
+citizen<-->core_widget
+citizen<-r->digid
+
+agent<-->connect_client
+
+core_widget<-->core
+auth_digid<-->core
+comm_connect<-u->core
+
+digid<->auth_digid
+
+connect_client<-->comm_connect
+
+@enduml
