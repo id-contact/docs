@@ -1,5 +1,5 @@
 @startuml
-title ID-contact Core Global deployment v0.4
+title ID-contact Core Global deployment v0.5
 skinparam rectangle {
     roundCorner<<Auth plugin>> 25
 }
@@ -37,6 +37,7 @@ rectangle "ID contact" {
     }
 }
 
+cloud "BRP" as brp
 cloud "24Sessions" as 24sessions
 cloud "IRMA" as irma_app
 cloud "DigiD" as digid_login
@@ -73,6 +74,7 @@ comm_24sessions-up-->24sessions_attr
 comm_connect<-up-connect_client
 
 auth_digid<-up->digid_login
+auth_digid<->brp
 
 auth_irma<--irma_qr
 auth_irma<-up-irma_app
