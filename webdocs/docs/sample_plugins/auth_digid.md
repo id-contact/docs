@@ -66,6 +66,8 @@ General information needed by the server, such as where it is publically reachab
 | ------------------ | ------------------------ | ------------------------------------------------------------------------------- |
 | ServerURL          | DIGID_SERVERURL          | URL on which end users can reach this plugin's server.                          |
 | DatabaseConnection | DIGID_DATABASECONNECTION | Postgres URL (including database name) for the database this server should use. |
+| SentryDSN          | DIGID_SENTRYDSN          | Sentry DSN (optional)                                                           |
+| LogLevel           | DIGID_LOGLEVEL           | LogLevel (optional, one of panic, fatal, error, warn, info, debug, trace)       |
 
 ### SAML Configuration
 
