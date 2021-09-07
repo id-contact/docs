@@ -184,3 +184,33 @@ allowed_comm = [ "call" ]
 defines three purposes. Note that in both `allowed_auth` and `allowed_comm`, we can use the wildcard `*` if we simply want to enable all communication or authentication methods for this purpose.
 
 A detailed explanation of what attributes and purposes are can be found in the [attributes](../concepts/Attributes.md) and [purposes](../concepts/Purposes.md) concept documentation.
+
+## Auth-Only start keys
+
+| key                   | environment variable          | description                                | default |
+| --------------------- | ----------------------------- | ------------------------------------------ | ------- |
+| authonly_request_keys | ROCKET_AUTHONLY_REQUEST_KEYS  | Hashmap of authonly starter and their keys |         |
+
+Each starter has a unique name, which should appear as the kid in the request jwts it produces. The key is specified through two subfields:
+
+| key  | description                                                                |
+| ---- | -------------------------------------------------------------------------- |
+| type | What type of key this is (`RSA` for RSA keys, `EC` for eliptic curve keys) |
+| key  | PEM encoding of the actual key                                             |
+
+In a configuration file, this results in the following configuration for an RSA signing key for a starter with the name "test":
+```toml
+[global.authonly_request_keys.test]
+type = "RSA"
+key = """
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5/wRrT2T4GGvuQYcWjLr
+/lFe51sTV2FLd3GAaMiHN8Q/VT/XEhP/kZ6042l1Bj2VpZ2yMxv294JKwBCINc34
+8VLYd+DfkMnJ4yX9LZHK2Wke6tCWBB9mYgGjMwCNdXczbl96x1/HevaTorvk91rz
+Cvzw6vV08jtprAyN5aYMU4I0/cVJwi03bh/skraAB110mQSqi1QU/2z6Hkuf7+/x
+/bACxviWCyPCd/wkXNpFhTcRlfFeyKcy0pwFx1OLCDJ1qY7oU+z1wcypeOHeiUSx
+riSHlWaT24ke+J78GGVmnCZdu/MRuun5hvgaiWxnhIBmExJY6vRuMlwkbRqOft5Q
+TQIDAQAB
+-----END PUBLIC KEY-----
+"""
+```
