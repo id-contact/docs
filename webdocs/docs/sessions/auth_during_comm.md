@@ -80,18 +80,33 @@ Host: core:8000
 Connection: close
 Content-Length: 73
 accept: application/json
-content-type: application/json
+content-type: application/jwt
 accept-encoding: gzip, deflate, br
 accept-language: en-US,en;q=0.9
 
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InRlc3QifQ.eyJyZXF1ZXN0Ijp7ImF1dGhfbWV0aG9kIjoiaXJtYSIsInB1cnBvc2UiOiJwZXJzb25hbF9xdWVzdGlvbiIsImNvbW1fdXJsIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9jaGF0IiwiYXR0cl91cmwiOiJodHRwczovL2V4YW1wbGUuY29tL2F0dHJpYnV0ZXMvYTEyMzQ1In19.JodY0o3xz2byJy4lS7pGai-KR36rE59mpweJ7YolASJ7wOOQwv8VCgsvBKsIMZBSS9mZjHagw5klHgh86H45kr-fqC5GS6Dxgrbtjs-TL93G97QGlfa9CFDRgm9um8npP-ghsSOAOHEk69is9LPeM5WV8YhVlvKnoT0eQSzTbtlI7PHg8MEDDbxrFf2AkbbdEj948BTYZ8V3vVwAAs8S3ZQi1RoDp3pZZdPKboKTSfrVWgRRfpm_bA_kpWkRTq8LQmi79mKH3X3Rw84vs8i40T3I-7GmcH5VUVAaKKlBt-2ZtfLcagypFW7uQZoPWlaupRJylu2KjmD2FI2lJ9Tv0w
+```
+The content of the request is a signed jwt containing the request and identifying the requestor. Decoded, it looks like:
+```json
 {
+  "alg": "RS256",
+  "typ": "JWT",
+  "kid": "test"
+}
+.
+{
+  "request": {
     "auth_method":"irma",
     "purpose":"personal_question",
     "comm_url":"https://example.com/chat",
     "attr_url":"https://example.com/attributes/a12345"
+  }
 }
+.
+<signature>
 ```
-and will get a response similar to
+
+This will result in a response similar to
 ```
 HTTP/1.0 200 OK
 content-type: application/json

@@ -78,7 +78,9 @@ paths:
         When called without a communication method
         starts just the authentication flow. The results of such a
         authentication-only flow can then be given to a later invocation
-        to start a communication session using that identification.
+        to start a communication session using that identification. For
+        such requests, the request body should be the request claim in a
+        signed jwt with properly set kid (see core documentation)
 
         When called without an authentication method it uses the given
         attributes as authentication, or if that is not available, starts
