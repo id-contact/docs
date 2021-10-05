@@ -23,3 +23,16 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
+
+/* fixes for the fact that infima does some global markup on these elements that interferes with swagger-ui */
+.swagger-ui .opblock-body pre.microlight code {
+  color: white;
+}
+
+.swagger-ui .info .title small.version-stamp pre.version {
+  background-color: #89bf04;
+}
+
+.swagger-ui .info .title small pre.version {
+  background-color: #7d8492;
+}
