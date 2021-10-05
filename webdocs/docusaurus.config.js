@@ -9,6 +9,10 @@ module.exports = {
   organizationName: 'id-contact', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
   themeConfig: {
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+    },
     prism: {
       additionalLanguages: ['http', 'toml'],
     },
