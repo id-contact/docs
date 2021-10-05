@@ -8,6 +8,9 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'id-contact', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
+  scripts: [
+    'reset_theme.js',
+  ],
   themeConfig: {
     prism: {
       additionalLanguages: ['http', 'toml'],
