@@ -1,0 +1,1 @@
+window.localStorage.removeItem('theme');
