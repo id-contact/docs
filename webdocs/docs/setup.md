@@ -85,6 +85,7 @@ We need to tell the plugin where it is located, and on which port we want it to 
 ```toml
 [global]
 server_url = "http://localhost:8001"
+internal_url = "http://localhost:8001"
 port = 8001
 ```
 As per our design above, we set the port to 8001 to give space for the other two servers.
@@ -150,6 +151,7 @@ Combined, this gives us the following for `config.toml`:
 ```toml
 [global]
 server_url = "http://localhost:8001"
+internal_url = "http://localhost:8001"
 port = 8001
 
 [global.attributes]
@@ -349,12 +351,17 @@ cd core
 
 The core already has a complete `config.toml`, but it is not suitable for our needs, so we will replace it.
 
-First, we again tell the server what port to use and where it is:
+First, we again tell the server what port to use and where it is.
 ```toml
 [global]
 server_url = "http://localhost:8000"
 internal_url = "http://localhost:8000"
 port = 8000
+```
+
+Then, we configure a `ui_tel_url`, which points to a generic UI for rendering telephone numbers along with authentication codes for use in telephony-based communication plugins. We're not using such a plugin for now, so we pass an empty value:
+```toml
+ui_tel_url = ""
 ```
 
 Next, we need to give it an internal secret. This is used to temporarily sign session data so that end users cannot manipulate that. Here we just use a simple test value.
@@ -397,6 +404,7 @@ Combined, this gives as content of `config.toml`:
 server_url = "http://localhost:8000"
 internal_url = "http://localhost:8000"
 port = 8000
+ui_tel_url = ""
 internal_secret = "sample_secret_12345678901234567890"
 
 [[global.auth_methods]]
